@@ -1,0 +1,209 @@
+Table category {
+  id integer [primary key]
+  name varchar
+  is_active bool
+}
+
+Table users {
+  id integer [primary key]
+  firstname varchar
+  lastname varchar
+  dob timestamp
+  annual_income float
+  username varchar
+  email varchar [unique, not null]
+  created_at timestamp
+  password varchar2
+  contact varchar2
+  address varchar(1000)
+  role enum
+  is_active bool
+  updated_on timestamp
+}
+
+Table veterinarian {
+  id integer [primary key]
+  name varchar
+  email varchar
+  contact_no varchar
+  is_active bool
+  consult_fee float
+}
+
+Table clinic {
+  id integer [primary key]
+  name varchar
+  description varchar(200)
+  address varchar(1000)
+  specialities varchar(1000)
+}
+
+Table appointment {
+  id integer [primary key]
+  appt_time timestamp
+  clinic integer
+  vaccine integer
+  is_consult bool
+  is_vaccine bool
+  is_grooming bool
+  vaccine_dose float
+  vaccine_other varchar
+  consult_detail varchar(1000)
+  tablet_prescribed varchar(1000)
+  next_visit_suggest timestamp
+  feedback integer
+  appt_by integer
+  pet_id integer
+  vet_id integer
+  reason varchar(1000)
+  created_at timestamp
+  updated_on timestamp
+  amount float
+}
+
+Table medicine {
+  id integer [primary key]
+  name varchar
+  created_on timestamp
+  expires_at timestamp
+  per_cost float
+  description varchar
+  is_ins_allowed bool
+}
+
+Table vaccine {
+  id integer [primary key]
+  name varchar
+  description varchar(200)
+  amount float
+  created_on timestamp
+  is_ins_allowed bool
+}
+
+Table feedback {
+  id integer [primary key]
+  title varchar
+  description text [note: 'feedback detail']
+  rate integer
+  appointment integer
+  created_at timestamp
+}
+
+Table pet {
+  id integer [primary key, note: 'unique string']
+  is_adopted bool
+  is_licensed bool
+  pet_name varchar
+  gender enum
+  weight float
+  age integer
+  dob timestamp
+  license_id integer
+  owner_id integer
+  category_id integer
+  insurance_id integer
+  created_at timestamp
+  updated_on timestamp
+}
+
+Table ins_pack_name {
+  id integer [primary key]
+  pack_name varchar
+  type varchar
+  coverage float
+  amount float
+  validity_in_months integer
+  is_active bool
+  created_at timestamp
+  updated_on timestamp
+  description varchar
+}
+
+Table insurance {
+  id varchar [primary key]
+  pack_id integer
+  pet_id integer
+  created_at timestamp
+  updated_on timestamp
+  expired_at timestamp
+  feedback integer
+}
+
+Table insurance_claim {
+  claim_id integer [primary key]
+  insurance_id varchar
+  claim_amount float
+  appt_id integer
+  is_settled bool
+  is_canceled bool
+  description bool
+  feedback integer
+}
+
+Table license_form {
+  id integer [primary key]
+  pet_id integer
+  owner_id integer
+  license_no varchar [unique]
+  issued_at timestamp
+  expires_on timestamp
+  is_active bool
+  amount float
+}
+
+Table adoption_form {
+  id integer [primary key]
+  pet_id integer
+  owner_id integer
+}
+
+Table grooming {
+  id integer [primary key]
+  name integer
+  description integer
+  cost integer
+  time_require timestamp
+  is_ins_allowed bool
+}
+
+Ref: appointment.clinic - clinic.id
+
+Ref: appointment.vaccine - vaccine.id
+
+Ref: appointment.feedback - feedback.id
+
+Ref: appointment.appt_by - users.id
+
+Ref: appointment.pet_id - pet.id
+
+Ref: pet.owner_id > users.id
+
+Ref: license_form.pet_id - pet.id
+
+Ref: insurance.pack_id - ins_pack_name.id
+
+Ref: insurance.pet_id > pet.id
+
+Ref: insurance_claim.insurance_id > insurance.id
+
+Ref: insurance_claim.appt_id > appointment.id
+
+Ref: pet.category_id > category.id
+
+Ref: license_form.owner_id > users.id
+
+Ref: adoption_form.pet_id > pet.id
+
+Ref: adoption_form.owner_id > users.id
+
+Ref: grooming.id <> appointment.id
+
+Ref: veterinarian.id <> clinic.id
+
+Ref: appointment.vet_id < veterinarian.id
+
+Ref: appointment.id <> medicine.id
+
+Ref: insurance.feedback <> feedback.id
+
+Ref: insurance_claim.feedback - feedback.id
