@@ -1,209 +1,271 @@
-Table category {
-  id integer [primary key]
-  name varchar
-  is_active bool
+Enum "user_role" {
+  "USER"
+  "ADMIN"
+  "ADMIN1"
 }
 
-Table users {
-  id integer [primary key]
-  firstname varchar
-  lastname varchar
-  dob timestamp
-  annual_income float
-  username varchar
-  email varchar [unique, not null]
-  created_at timestamp
-  password varchar2
-  contact varchar2
-  address varchar(1000)
-  role enum
-  is_active bool
-  updated_on timestamp
+Enum "gender" {
+  "MALE"
+  "FEMALE"
+  "OTHERS"
 }
 
-Table veterinarian {
-  id integer [primary key]
-  name varchar
-  email varchar
-  contact_no varchar
-  is_active bool
-  consult_fee float
+Table "category" {
+  "id" integer [pk]
+  "name" varchar(30)
+  "is_active" bool
 }
 
-Table clinic {
-  id integer [primary key]
-  name varchar
-  description varchar(200)
-  address varchar(1000)
-  specialities varchar(1000)
+Table "users" {
+  "id" integer [pk]
+  "firstname" varchar(30)
+  "lastname" varchar(30)
+  "dob" timestamp
+  "annual_income" float
+  "username" varchar(30)
+  "email" varchar(30) [unique, not null]
+  "created_at" timestamp
+  "password" varchar(100)
+  "contact" varchar(12)
+  "address" varchar(1000)
+  "role" user_role
+  "is_active" bool
+  "updated_on" timestamp
 }
 
-Table appointment {
-  id integer [primary key]
-  appt_time timestamp
-  clinic integer
-  vaccine integer
-  is_consult bool
-  is_vaccine bool
-  is_grooming bool
-  vaccine_dose float
-  vaccine_other varchar
-  consult_detail varchar(1000)
-  tablet_prescribed varchar(1000)
-  next_visit_suggest timestamp
-  feedback integer
-  appt_by integer
-  pet_id integer
-  vet_id integer
-  reason varchar(1000)
-  created_at timestamp
-  updated_on timestamp
-  amount float
+Table "veterinarian" {
+  "id" integer [pk]
+  "name" varchar(30)
+  "email" varchar(30)
+  "contact_no" varchar(12)
+  "is_active" bool
+  "consult_fee" float
 }
 
-Table medicine {
-  id integer [primary key]
-  name varchar
-  created_on timestamp
-  expires_at timestamp
-  per_cost float
-  description varchar
-  is_ins_allowed bool
+Table "clinic" {
+  "id" integer [pk]
+  "name" varchar
+  "description" varchar(2000)
+  "address" varchar(1000)
+  "specialities" varchar(1000)
 }
 
-Table vaccine {
-  id integer [primary key]
-  name varchar
-  description varchar(200)
-  amount float
-  created_on timestamp
-  is_ins_allowed bool
+Table "appointment" {
+  "id" integer [pk]
+  "appt_time" timestamp
+  "clinic" integer
+  "vaccine" integer
+  "is_consult" bool
+  "is_vaccine" bool
+  "is_grooming" bool
+  "vaccine_dose" float
+  "vaccine_other" varchar(30)
+  "consult_detail" varchar(1000)
+  "tablet_prescribed" varchar(1000)
+  "next_visit_suggest" timestamp
+  "feedback" integer
+  "appt_by" integer
+  "pet_id" integer
+  "vet_id" integer
+  "reason" varchar(1000)
+  "created_at" timestamp
+  "updated_on" timestamp
+  "amount" float
 }
 
-Table feedback {
-  id integer [primary key]
-  title varchar
-  description text [note: 'feedback detail']
-  rate integer
-  appointment integer
-  created_at timestamp
+Table "medicine" {
+  "id" integer [pk]
+  "name" varchar(30)
+  "created_on" timestamp
+  "expires_at" timestamp
+  "per_cost" float
+  "description" varchar(1000)
+  "is_ins_allowed" bool
 }
 
-Table pet {
-  id integer [primary key, note: 'unique string']
-  is_adopted bool
-  is_licensed bool
-  pet_name varchar
-  gender enum
-  weight float
-  age integer
-  dob timestamp
-  license_id integer
-  owner_id integer
-  category_id integer
-  insurance_id integer
-  created_at timestamp
-  updated_on timestamp
+Table "vaccine" {
+  "id" integer [pk]
+  "name" varchar(30)
+  "description" varchar(200)
+  "amount" float
+  "created_on" timestamp
+  "is_ins_allowed" bool
 }
 
-Table ins_pack_name {
-  id integer [primary key]
-  pack_name varchar
-  type varchar
-  coverage float
-  amount float
-  validity_in_months integer
-  is_active bool
-  created_at timestamp
-  updated_on timestamp
-  description varchar
+Table "feedback" {
+  "id" integer [pk]
+  "title" varchar(60)
+  "description" text [note: 'feedback detail']
+  "rate" integer
+  "appointment" integer
+  "created_at" timestamp
 }
 
-Table insurance {
-  id varchar [primary key]
-  pack_id integer
-  pet_id integer
-  created_at timestamp
-  updated_on timestamp
-  expired_at timestamp
-  feedback integer
+Table "pet" {
+  "id" integer [pk, note: 'unique string']
+  "is_adopted" bool
+  "is_licensed" bool
+  "pet_name" varchar(30)
+  "gender" gender
+  "weight" float
+  "age" integer
+  "dob" timestamp
+  "license_id" integer
+  "owner_id" integer
+  "category_id" integer
+  "insurance_id" integer
+  "created_at" timestamp
+  "updated_on" timestamp
 }
 
-Table insurance_claim {
-  claim_id integer [primary key]
-  insurance_id varchar
-  claim_amount float
-  appt_id integer
-  is_settled bool
-  is_canceled bool
-  description bool
-  feedback integer
+Table "ins_pack_name" {
+  "id" integer [pk]
+  "pack_name" varchar(30)
+  "type" varchar(30)
+  "coverage" float
+  "amount" float
+  "validity_in_months" integer
+  "is_active" bool
+  "created_at" timestamp
+  "updated_on" timestamp
+  "description" varchar(2000)
 }
 
-Table license_form {
-  id integer [primary key]
-  pet_id integer
-  owner_id integer
-  license_no varchar [unique]
-  issued_at timestamp
-  expires_on timestamp
-  is_active bool
-  amount float
+Table "insurance" {
+  "id" varchar(30) [pk]
+  "pack_id" integer
+  "pet_id" integer
+  "created_at" timestamp
+  "updated_on" timestamp
+  "expired_at" timestamp
+  "feedback" integer
 }
 
-Table adoption_form {
-  id integer [primary key]
-  pet_id integer
-  owner_id integer
+Table "insurance_claim" {
+  "claim_id" integer [pk]
+  "insurance_id" varchar(30)
+  "claim_amount" float
+  "appt_id" integer
+  "is_settled" bool
+  "is_canceled" bool
+  "description" bool
+  "feedback" integer
 }
 
-Table grooming {
-  id integer [primary key]
-  name integer
-  description integer
-  cost integer
-  time_require timestamp
-  is_ins_allowed bool
+Table "license_form" {
+  "id" integer [pk]
+  "pet_id" integer
+  "owner_id" integer
+  "license_no" varchar(30) [unique]
+  "issued_at" timestamp
+  "expires_on" timestamp
+  "is_active" bool
+  "amount" float
 }
 
-Ref: appointment.clinic - clinic.id
+Table "adoption_form" {
+  "id" integer [pk]
+  "pet_id" integer
+  "owner_id" integer
+  "description" varchar(2000)
+  "created_at" timestamp
+  "updated_on" timestamp
+  "approved_by" integer
+}
 
-Ref: appointment.vaccine - vaccine.id
+Table "grooming" {
+  "id" integer [pk]
+  "name" integer
+  "description" integer
+  "cost" float
+  "time_require" timestamp
+  "is_ins_allowed" bool
+}
 
-Ref: appointment.feedback - feedback.id
+Table "grooming_appointment" {
+  "grooming_id" integer
+  "appointment_id" integer
 
-Ref: appointment.appt_by - users.id
+  Indexes {
+    (grooming_id, appointment_id) [pk]
+  }
+}
 
-Ref: appointment.pet_id - pet.id
+Table "veterinarian_clinic" {
+  "veterinarian_id" integer
+  "clinic_id" integer
 
-Ref: pet.owner_id > users.id
+  Indexes {
+    (veterinarian_id, clinic_id) [pk]
+  }
+}
 
-Ref: license_form.pet_id - pet.id
+Table "appointment_medicine" {
+  "appointment_id" integer
+  "medicine_id" integer
 
-Ref: insurance.pack_id - ins_pack_name.id
+  Indexes {
+    (appointment_id, medicine_id) [pk]
+  }
+}
 
-Ref: insurance.pet_id > pet.id
+Table "insurance_feedback" {
+  "insurance_id" varchar(30)
+  "feedback_id" integer
 
-Ref: insurance_claim.insurance_id > insurance.id
+  Indexes {
+    (insurance_id, feedback_id) [pk]
+  }
+}
 
-Ref: insurance_claim.appt_id > appointment.id
+Ref:"clinic"."id" < "appointment"."clinic"
 
-Ref: pet.category_id > category.id
+Ref:"vaccine"."id" < "appointment"."vaccine"
 
-Ref: license_form.owner_id > users.id
+Ref:"feedback"."id" < "appointment"."feedback"
 
-Ref: adoption_form.pet_id > pet.id
+Ref:"users"."id" < "appointment"."appt_by"
 
-Ref: adoption_form.owner_id > users.id
+Ref:"pet"."id" < "appointment"."pet_id"
 
-Ref: grooming.id <> appointment.id
+Ref:"users"."id" < "pet"."owner_id"
 
-Ref: veterinarian.id <> clinic.id
+Ref:"pet"."id" < "license_form"."pet_id"
 
-Ref: appointment.vet_id < veterinarian.id
+Ref:"ins_pack_name"."id" < "insurance"."pack_id"
 
-Ref: appointment.id <> medicine.id
+Ref:"pet"."id" < "insurance"."pet_id"
 
-Ref: insurance.feedback <> feedback.id
+Ref:"insurance"."id" < "insurance_claim"."insurance_id"
 
-Ref: insurance_claim.feedback - feedback.id
+Ref:"appointment"."id" < "insurance_claim"."appt_id"
+
+Ref:"category"."id" < "pet"."category_id"
+
+Ref:"users"."id" < "license_form"."owner_id"
+
+Ref:"pet"."id" < "adoption_form"."pet_id"
+
+Ref:"users"."id" < "adoption_form"."owner_id"
+
+Ref:"users"."id" < "adoption_form"."approved_by"
+
+Ref:"grooming"."id" < "grooming_appointment"."grooming_id"
+
+Ref:"appointment"."id" < "grooming_appointment"."appointment_id"
+
+Ref:"veterinarian"."id" < "veterinarian_clinic"."veterinarian_id"
+
+Ref:"clinic"."id" < "veterinarian_clinic"."clinic_id"
+
+Ref:"veterinarian"."id" < "appointment"."vet_id"
+
+Ref:"appointment"."id" < "appointment_medicine"."appointment_id"
+
+Ref:"medicine"."id" < "appointment_medicine"."medicine_id"
+
+Ref:"insurance"."id" < "insurance_feedback"."insurance_id"
+
+Ref:"feedback"."id" < "insurance_feedback"."feedback_id"
+
+Ref:"feedback"."id" < "insurance_claim"."feedback"
