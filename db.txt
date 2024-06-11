@@ -11,13 +11,13 @@ Enum "gender" {
 }
 
 Table "category" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "name" varchar(30)
   "is_active" bool
 }
 
 Table "users" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "firstname" varchar(30)
   "lastname" varchar(30)
   "dob" timestamp
@@ -34,7 +34,7 @@ Table "users" {
 }
 
 Table "veterinarian" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "name" varchar(30)
   "email" varchar(30)
   "contact_no" varchar(12)
@@ -43,7 +43,7 @@ Table "veterinarian" {
 }
 
 Table "clinic" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "name" varchar
   "description" varchar(2000)
   "address" varchar(1000)
@@ -51,7 +51,7 @@ Table "clinic" {
 }
 
 Table "appointment" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "appt_time" timestamp
   "clinic" integer
   "vaccine" integer
@@ -74,7 +74,7 @@ Table "appointment" {
 }
 
 Table "medicine" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "name" varchar(30)
   "created_on" timestamp
   "expires_at" timestamp
@@ -84,7 +84,7 @@ Table "medicine" {
 }
 
 Table "vaccine" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "name" varchar(30)
   "description" varchar(200)
   "amount" float
@@ -93,7 +93,7 @@ Table "vaccine" {
 }
 
 Table "feedback" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "title" varchar(60)
   "description" text [note: 'feedback detail']
   "rate" integer
@@ -102,7 +102,7 @@ Table "feedback" {
 }
 
 Table "pet" {
-  "id" integer [pk, note: 'unique string']
+  "id" integer [pk, increment, note: 'unique string']
   "is_adopted" bool
   "is_licensed" bool
   "pet_name" varchar(30)
@@ -119,7 +119,7 @@ Table "pet" {
 }
 
 Table "ins_pack_name" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "pack_name" varchar(30)
   "type" varchar(30)
   "coverage" float
@@ -132,7 +132,7 @@ Table "ins_pack_name" {
 }
 
 Table "insurance" {
-  "id" varchar(30) [pk]
+  "id" varchar(30) [pk, increment]
   "pack_id" integer
   "pet_id" integer
   "created_at" timestamp
@@ -142,7 +142,7 @@ Table "insurance" {
 }
 
 Table "insurance_claim" {
-  "claim_id" integer [pk]
+  "claim_id" integer [pk, increment]
   "insurance_id" varchar(30)
   "claim_amount" float
   "appt_id" integer
@@ -153,7 +153,7 @@ Table "insurance_claim" {
 }
 
 Table "license_form" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "pet_id" integer
   "owner_id" integer
   "license_no" varchar(30) [unique]
@@ -164,7 +164,7 @@ Table "license_form" {
 }
 
 Table "adoption_form" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "pet_id" integer
   "owner_id" integer
   "description" varchar(2000)
@@ -174,7 +174,7 @@ Table "adoption_form" {
 }
 
 Table "grooming" {
-  "id" integer [pk]
+  "id" integer [pk, increment]
   "name" integer
   "description" integer
   "cost" float
