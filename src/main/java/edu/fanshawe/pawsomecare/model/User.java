@@ -88,14 +88,14 @@ public class User implements Serializable {
 		return approverForm;
 	}
 
-	public AdoptionForm addPetOwmerForms(AdoptionForm petOwnerForm) {
+	public AdoptionForm addPetOwnerForms(AdoptionForm petOwnerForm) {
 		getPetOwnerForms().add(petOwnerForm);
 		petOwnerForm.setOwnerId(this);
 
 		return petOwnerForm;
 	}
 
-	public AdoptionForm removeAdoptionForms2(AdoptionForm petOwnerForm) {
+	public AdoptionForm removePetOwnerForms(AdoptionForm petOwnerForm) {
 		getPetOwnerForms().remove(petOwnerForm);
 		petOwnerForm.setOwnerId(null);
 
