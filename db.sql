@@ -113,7 +113,6 @@ CREATE TABLE "pet" (
   "license_id" integer,
   "owner_id" integer,
   "category_id" integer,
-  "insurance_id" integer,
   "created_at" timestamp,
   "updated_on" timestamp
 );
@@ -221,6 +220,8 @@ ALTER TABLE "appointment" ADD FOREIGN KEY ("appt_by") REFERENCES "users" ("id");
 ALTER TABLE "appointment" ADD FOREIGN KEY ("pet_id") REFERENCES "pet" ("id");
 
 ALTER TABLE "pet" ADD FOREIGN KEY ("owner_id") REFERENCES "users" ("id");
+
+ALTER TABLE "pet" ADD FOREIGN KEY ("license_id") REFERENCES "license_form" ("id");
 
 ALTER TABLE "license_form" ADD FOREIGN KEY ("pet_id") REFERENCES "pet" ("id");
 
