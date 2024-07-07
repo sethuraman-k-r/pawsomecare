@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,7 +33,7 @@ public class Pet implements Serializable {
 
 	private Timestamp dob;
 
-	private String gender;
+	private Gender gender;
 
 	@Column(name="is_adopted")
 	private Boolean isAdopted;
@@ -51,6 +52,7 @@ public class Pet implements Serializable {
 	//bi-directional many-to-one association to AdoptionForm
 	@OneToMany(mappedBy="pet")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<AdoptionForm> adoptionForms;
 
 	//bi-directional many-to-one association to Appointment
@@ -70,6 +72,8 @@ public class Pet implements Serializable {
 
 	//bi-directional many-to-one association to Category
 	@ManyToOne
+	@ToString.Exclude
+	@JsonIgnore
 	private Category category;
 
 	//bi-directional many-to-one association to LicenseForm
@@ -80,6 +84,7 @@ public class Pet implements Serializable {
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="owner_id")
+	@JsonIgnore
 	private User user;
 
 	public AdoptionForm addAdoptionForm(AdoptionForm adoptionForm) {

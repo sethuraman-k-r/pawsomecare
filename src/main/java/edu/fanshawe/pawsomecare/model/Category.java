@@ -27,6 +27,7 @@ public class Category implements Serializable {
 	@Column(name="is_active")
 	private Boolean isActive;
 
+	@Column(unique = true)
 	private String name;
 
 	//bi-directional many-to-one association to Pet
