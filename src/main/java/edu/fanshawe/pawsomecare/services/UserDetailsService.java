@@ -56,6 +56,7 @@ public class UserDetailsService {
 		if (userRequest.getLastname() != null) {
 			user.setLastname(userRequest.getLastname());
 		}
+		user.setUsername(user.getFirstname() + " " + (user.getLastname() != null ? user.getLastname() : ""));
 		if (userRequest.getDob() != null) {
 			user.setDob(Timestamp.from(userRequest.getDob().toInstant()));
 		}

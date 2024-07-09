@@ -58,16 +58,19 @@ public class Pet implements Serializable {
 	//bi-directional many-to-one association to Appointment
 	@OneToMany(mappedBy="pet")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Appointment> appointments;
 
 	//bi-directional many-to-one association to Insurance
 	@OneToMany(mappedBy="pet")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Insurance> insurances;
 
 	//bi-directional many-to-one association to LicenseForm
 	@OneToMany(mappedBy="pet")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<LicenseForm> licenseForms;
 
 	//bi-directional many-to-one association to Category
@@ -79,6 +82,7 @@ public class Pet implements Serializable {
 	//bi-directional many-to-one association to LicenseForm
 	@ManyToOne
 	@JoinColumn(name="license_id")
+	@JsonIgnore
 	private LicenseForm licenseForm;
 
 	//bi-directional many-to-one association to User

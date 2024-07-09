@@ -56,6 +56,16 @@ public class AuthController {
 		}
 	}
 
+	@PostMapping("/user")
+	public ResponseEntity<User> doGetAuthUser() {
+		try {
+			User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+			return ResponseEntity.ok(user);
+		} catch (Exception ex) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
+
 	@PostMapping("/user/update")
 	public ResponseEntity<User> doUpdateUser(@RequestBody UserRequest userRequest) {
 		try {
