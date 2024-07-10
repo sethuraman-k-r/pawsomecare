@@ -37,14 +37,14 @@ public class AdoptionForm implements Serializable {
 	@ManyToOne
 	private Pet pet;
 
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="approved_by")
-	private User approvedBy;
-
-	//bi-directional many-to-one association to User
-	@ManyToOne
-	@JoinColumn(name="owner_id")
-	private User ownerId;
+//	//bi-directional many-to-one association to User
+//	@ManyToOne
+//	@JoinColumn(name="approved_by")
+//	private User approvedBy;
+//
+//	//bi-directional many-to-one association to User
+//	@ManyToOne
+//	@JoinColumn(name="owner_id")
+//	private User ownerId;
 
 }

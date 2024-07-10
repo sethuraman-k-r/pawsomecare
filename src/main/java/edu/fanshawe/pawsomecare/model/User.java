@@ -68,17 +68,17 @@ public class User implements Serializable, UserDetails {
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> authRoles;
 
-	// bi-directional many-to-one association to AdoptionForm
-	@OneToMany(mappedBy = "approvedBy", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JsonIgnore
-	@ToString.Exclude
-	private List<AdoptionForm> approverForms;
-
-	// bi-directional many-to-one association to AdoptionForm
-	@OneToMany(mappedBy = "ownerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JsonIgnore
-	@ToString.Exclude
-	private List<AdoptionForm> petOwnerForms;
+//	// bi-directional many-to-one association to AdoptionForm
+//	@OneToMany(mappedBy = "approvedBy", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JsonIgnore
+//	@ToString.Exclude
+//	private List<AdoptionForm> approverForms;
+//
+//	// bi-directional many-to-one association to AdoptionForm
+//	@OneToMany(mappedBy = "ownerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+//	@JsonIgnore
+//	@ToString.Exclude
+//	private List<AdoptionForm> petOwnerForms;
 
 	// bi-directional many-to-one association to Appointment
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -98,31 +98,31 @@ public class User implements Serializable, UserDetails {
 	public User() {
 	}
 
-	public AdoptionForm addApproverForms(AdoptionForm approverForm) {
-		getApproverForms().add(approverForm);
-		approverForm.setApprovedBy(this);
-		return approverForm;
-	}
-
-	public AdoptionForm removeApproverForms(AdoptionForm approverForm) {
-		getApproverForms().remove(approverForm);
-		approverForm.setApprovedBy(null);
-		return approverForm;
-	}
-
-	public AdoptionForm addPetOwnerForms(AdoptionForm petOwnerForm) {
-		getPetOwnerForms().add(petOwnerForm);
-		petOwnerForm.setOwnerId(this);
-
-		return petOwnerForm;
-	}
-
-	public AdoptionForm removePetOwnerForms(AdoptionForm petOwnerForm) {
-		getPetOwnerForms().remove(petOwnerForm);
-		petOwnerForm.setOwnerId(null);
-
-		return petOwnerForm;
-	}
+//	public AdoptionForm addApproverForms(AdoptionForm approverForm) {
+//		getApproverForms().add(approverForm);
+//		approverForm.setApprovedBy(this);
+//		return approverForm;
+//	}
+//
+//	public AdoptionForm removeApproverForms(AdoptionForm approverForm) {
+//		getApproverForms().remove(approverForm);
+//		approverForm.setApprovedBy(null);
+//		return approverForm;
+//	}
+//
+//	public AdoptionForm addPetOwnerForms(AdoptionForm petOwnerForm) {
+//		getPetOwnerForms().add(petOwnerForm);
+//		petOwnerForm.setOwnerId(this);
+//
+//		return petOwnerForm;
+//	}
+//
+//	public AdoptionForm removePetOwnerForms(AdoptionForm petOwnerForm) {
+//		getPetOwnerForms().remove(petOwnerForm);
+//		petOwnerForm.setOwnerId(null);
+//
+//		return petOwnerForm;
+//	}
 
 	public Appointment addAppointment(Appointment appointment) {
 		getAppointments().add(appointment);

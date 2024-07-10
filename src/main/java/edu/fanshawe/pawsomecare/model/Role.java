@@ -28,4 +28,7 @@ public class Role {
     @ManyToMany(mappedBy = "authRoles")
     private List<User> users;
 
+    @ManyToMany(mappedBy = "authRoles")
+    private List<Staff> staffs;
+
 }

@@ -46,10 +46,10 @@ public class SPCAController {
         return ResponseEntity.ok().body(petService.addUnadoptedPet(petRequest, petCategory));
     }
 
-    @PostMapping("/approve/pet/adopt")
-    public ResponseEntity<Boolean> approvePetAdopt(@RequestParam("adoptId") Integer adoptId) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok().body(petService.approvePetAdoption(adoptId, user));
-    }
+//    @PostMapping("/approve/pet/adopt")
+//    public ResponseEntity<Boolean> approvePetAdopt(@RequestParam("adoptId") Integer adoptId) {
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return ResponseEntity.ok().body(petService.approvePetAdoption(adoptId, user));
+//    }
 
 }

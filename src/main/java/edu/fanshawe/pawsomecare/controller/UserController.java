@@ -21,10 +21,10 @@ public class UserController {
 
     private final PetService petService;
 
-    @RequestMapping("adopt/new")
-    public ResponseEntity<Boolean> requestPetAdoption(@RequestBody AdoptionRequest petAdoption) {
-        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return ResponseEntity.ok().body(petService.requestForPetAdoption(petAdoption, user));
-    }
+//    @RequestMapping("adopt/new")
+//    public ResponseEntity<Boolean> requestPetAdoption(@RequestBody AdoptionRequest petAdoption) {
+//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        return ResponseEntity.ok().body(petService.requestForPetAdoption(petAdoption, user));
+//    }
 
 }

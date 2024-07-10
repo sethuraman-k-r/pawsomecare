@@ -37,10 +37,10 @@ public class Clinic implements Serializable {
 	@ToString.Exclude
 	private List<Appointment> appointments;
 
-	//bi-directional many-to-many association to Veterinarian
+	//bi-directional many-to-many association to Staff
 	@ManyToMany(mappedBy="clinics")
 	@ToString.Exclude
-	private List<Veterinarian> veterinarians;
+	private List<Staff> staffs;
 
 	public Appointment addAppointment(Appointment appointment) {
 		getAppointments().add(appointment);
