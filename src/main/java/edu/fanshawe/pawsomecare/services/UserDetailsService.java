@@ -2,7 +2,9 @@ package edu.fanshawe.pawsomecare.services;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.Arrays;
 
+import edu.fanshawe.pawsomecare.repository.RoleRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,6 +24,7 @@ public class UserDetailsService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final RoleRepository roleRepository;
 
 	public UserDetails loadUserByUsername(String username, String password) throws UsernameNotFoundException {
 		User user = userRepository.findByEmail(username);
@@ -41,7 +44,8 @@ public class UserDetailsService {
 		user.setPassword(passwordEncoder.encode(authRequest.getPassword()));
 		user.setUsername(authRequest.getUsername());
 		user.setFirstname(authRequest.getUsername());
-//		user.setRole(UserRole.USER);
+		System.out.println(roleRepository.findByRoleTypeEquals("CLIENT"));
+		user.setAuthRoles(Arrays.asList(roleRepository.findByRoleTypeEquals("CLIENT").orElse(null)));
 		user.setCreatedAt(Timestamp.from(Instant.now()));
 		user.setIsActive(true);
 		user.setUpdatedOn(null);

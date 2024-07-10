@@ -16,6 +16,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Table(name = "staffs")
 @ToString
 @RequiredArgsConstructor
 public class Staff implements Serializable {

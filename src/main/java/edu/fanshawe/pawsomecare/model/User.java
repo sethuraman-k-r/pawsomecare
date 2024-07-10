@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.ToString;
 import org.springframework.security.core.GrantedAuthority;
@@ -22,7 +23,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
  */
 @Entity
 @Table(name = "users")
-@NamedQuery(name = "User.findAll", query = "SELECT u FROM User u")
 @Data
 public class User implements Serializable, UserDetails {
 	private static final long serialVersionUID = 1L;
@@ -169,8 +169,7 @@ public class User implements Serializable, UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		ArrayList<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-//		SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_" + getRole().name());
-//		roles.add(role);
+		roles.addAll(getAuthRoles().stream().map(r -> new SimpleGrantedAuthority("ROLE_" + r.getRoleType())).collect(Collectors.toUnmodifiableList()));
 		return roles;
 	}
 

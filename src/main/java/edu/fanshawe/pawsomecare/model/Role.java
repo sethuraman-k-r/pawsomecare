@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +27,11 @@ public class Role {
     private String roleType;
 
     @ManyToMany(mappedBy = "authRoles")
+    @JsonIgnore
     private List<User> users;
 
     @ManyToMany(mappedBy = "authRoles")
+    @JsonIgnore
     private List<Staff> staffs;
 
 }
