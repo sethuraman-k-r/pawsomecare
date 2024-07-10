@@ -61,12 +61,6 @@ public class Pet implements Serializable {
 	@JsonIgnore
 	private List<Appointment> appointments;
 
-	//bi-directional many-to-one association to Insurance
-	@OneToMany(mappedBy="pet")
-	@ToString.Exclude
-	@JsonIgnore
-	private List<Insurance> insurances;
-
 	//bi-directional many-to-one association to LicenseForm
 	@OneToMany(mappedBy="pet")
 	@ToString.Exclude
@@ -77,7 +71,7 @@ public class Pet implements Serializable {
 	@ManyToOne
 	@ToString.Exclude
 	@JsonIgnore
-	private Category category;
+	private PetCategory petCategory;
 
 	//bi-directional many-to-one association to LicenseForm
 	@ManyToOne
@@ -117,20 +111,6 @@ public class Pet implements Serializable {
 		appointment.setPet(null);
 
 		return appointment;
-	}
-
-	public Insurance addInsurance(Insurance insurance) {
-		getInsurances().add(insurance);
-		insurance.setPet(this);
-
-		return insurance;
-	}
-
-	public Insurance removeInsurance(Insurance insurance) {
-		getInsurances().remove(insurance);
-		insurance.setPet(null);
-
-		return insurance;
 	}
 
 	public LicenseForm addLicenseForm(LicenseForm licenseForm) {

@@ -105,28 +105,13 @@ public class Appointment implements Serializable {
 	@ToString.Exclude
 	private List<Medicine> medicines;
 
+	@ManyToOne
+	@JoinColumn(name="service_id", nullable=false)
+	private Service service;
+
 	//bi-directional many-to-many association to Grooming
 	@ManyToMany(mappedBy="appointments")
 	@ToString.Exclude
 	private List<Grooming> groomings;
-
-	//bi-directional many-to-one association to InsuranceClaim
-	@OneToMany(mappedBy="appointment")
-	@ToString.Exclude
-	private List<InsuranceClaim> insuranceClaims;
-
-	public InsuranceClaim addInsuranceClaim(InsuranceClaim insuranceClaim) {
-		getInsuranceClaims().add(insuranceClaim);
-		insuranceClaim.setAppointment(this);
-
-		return insuranceClaim;
-	}
-
-	public InsuranceClaim removeInsuranceClaim(InsuranceClaim insuranceClaim) {
-		getInsuranceClaims().remove(insuranceClaim);
-		insuranceClaim.setAppointment(null);
-
-		return insuranceClaim;
-	}
 
 }

@@ -41,16 +41,6 @@ public class Feedback implements Serializable {
 	@ToString.Exclude
 	private List<Appointment> appointments;
 
-	//bi-directional many-to-one association to InsuranceClaim
-	@OneToMany(mappedBy="feedback")
-	@ToString.Exclude
-	private List<InsuranceClaim> insuranceClaims;
-
-	//bi-directional many-to-many association to Insurance
-	@ManyToMany(mappedBy="feedbacks")
-	@ToString.Exclude
-	private List<Insurance> insurances;
-
 	public Appointment addAppointment(Appointment appointment) {
 		getAppointments().add(appointment);
 		appointment.setFeedbackBean(this);
@@ -63,20 +53,6 @@ public class Feedback implements Serializable {
 		appointment.setFeedbackBean(null);
 
 		return appointment;
-	}
-
-	public InsuranceClaim addInsuranceClaim(InsuranceClaim insuranceClaim) {
-		getInsuranceClaims().add(insuranceClaim);
-		insuranceClaim.setFeedback(this);
-
-		return insuranceClaim;
-	}
-
-	public InsuranceClaim removeInsuranceClaim(InsuranceClaim insuranceClaim) {
-		getInsuranceClaims().remove(insuranceClaim);
-		insuranceClaim.setFeedback(null);
-
-		return insuranceClaim;
 	}
 
 }

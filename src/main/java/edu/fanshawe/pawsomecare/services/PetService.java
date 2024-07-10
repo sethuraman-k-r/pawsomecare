@@ -25,13 +25,13 @@ public class PetService {
 		return petRepository.findByIsAdopted(isAdopt);
 	}
 
-	public Pet addUnadoptedPet(AddUnAdoptedPetRequest petRequest, Category petCategory) {
+	public Pet addUnadoptedPet(AddUnAdoptedPetRequest petRequest, PetCategory petCategory) {
 		Pet pet = new Pet();
 		pet.setPetName(petRequest.getName());
 		pet.setGender(petRequest.getGender());
 		pet.setDob(Timestamp.from(petRequest.getDob().toInstant()));
 		pet.setCreatedAt(Timestamp.from(Instant.now()));
-		pet.setCategory(petCategory);
+		pet.setPetCategory(petCategory);
 		pet.setIsAdopted(false);
 		pet.setIsLicensed(false);
 		pet.setWeight(petRequest.getWeight());

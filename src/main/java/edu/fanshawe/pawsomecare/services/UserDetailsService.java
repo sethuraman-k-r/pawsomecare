@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import edu.fanshawe.pawsomecare.model.User;
-import edu.fanshawe.pawsomecare.model.UserRole;
 import edu.fanshawe.pawsomecare.model.request.AuthRequest;
 import edu.fanshawe.pawsomecare.model.request.ChangePasswordRequest;
 import edu.fanshawe.pawsomecare.model.request.UserRequest;
@@ -42,7 +41,7 @@ public class UserDetailsService {
 		user.setPassword(passwordEncoder.encode(authRequest.getPassword()));
 		user.setUsername(authRequest.getUsername());
 		user.setFirstname(authRequest.getUsername());
-		user.setRole(UserRole.USER);
+//		user.setRole(UserRole.USER);
 		user.setCreatedAt(Timestamp.from(Instant.now()));
 		user.setIsActive(true);
 		user.setUpdatedOn(null);

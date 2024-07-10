@@ -12,12 +12,11 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="Category.findAll", query="SELECT c FROM Category c")
 @Getter
 @Setter
 @ToString
 @RequiredArgsConstructor
-public class Category implements Serializable {
+public class PetCategory implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -31,20 +30,20 @@ public class Category implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Pet
-	@OneToMany(mappedBy="category")
+	@OneToMany(mappedBy= "petCategory")
 	@ToString.Exclude
 	private List<Pet> pets;
 
 	public Pet addPet(Pet pet) {
 		getPets().add(pet);
-		pet.setCategory(this);
+		pet.setPetCategory(this);
 
 		return pet;
 	}
 
 	public Pet removePet(Pet pet) {
 		getPets().remove(pet);
-		pet.setCategory(null);
+		pet.setPetCategory(null);
 
 		return pet;
 	}

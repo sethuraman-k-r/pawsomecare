@@ -56,13 +56,17 @@ public class User implements Serializable, UserDetails {
 	@JsonIgnore
 	private String password;
 
-	@Enumerated(EnumType.ORDINAL)
-	private UserRole role;
-
 	@Column(name = "updated_on")
 	private Timestamp updatedOn;
 
 	private String username;
+
+	@ManyToMany
+	@JoinTable(
+			name = "user_auth_role",
+			joinColumns = @JoinColumn(name = "user_id"),
+			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	private List<Role> authRoles;
 
 	// bi-directional many-to-one association to AdoptionForm
 	@OneToMany(mappedBy = "approvedBy", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -165,8 +169,8 @@ public class User implements Serializable, UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		ArrayList<GrantedAuthority> roles = new ArrayList<GrantedAuthority>();
-		SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_" + getRole().name());
-		roles.add(role);
+//		SimpleGrantedAuthority role = new SimpleGrantedAuthority("ROLE_" + getRole().name());
+//		roles.add(role);
 		return roles;
 	}
 

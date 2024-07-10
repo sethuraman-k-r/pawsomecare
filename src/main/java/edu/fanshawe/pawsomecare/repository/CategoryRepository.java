@@ -2,15 +2,14 @@ package edu.fanshawe.pawsomecare.repository;
 
 import java.util.Optional;
 
+import edu.fanshawe.pawsomecare.model.PetCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.fanshawe.pawsomecare.model.Category;
-
 
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Integer> {
+public interface CategoryRepository extends JpaRepository<PetCategory, Integer> {
 
-	Optional<Category> findByName(String name);
+	Optional<PetCategory> findByName(String name);
 	
 }
