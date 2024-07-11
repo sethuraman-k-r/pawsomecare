@@ -33,12 +33,10 @@ public class User implements Serializable, UserDetails {
 
 	private String address;
 
-	@Column(name = "annual_income")
 	private double annualIncome;
 
 	private String contact;
 
-	@Column(name = "created_at")
 	private Timestamp createdAt;
 
 	private Timestamp dob;
@@ -48,7 +46,6 @@ public class User implements Serializable, UserDetails {
 
 	private String firstname;
 
-	@Column(name = "is_active")
 	private Boolean isActive;
 
 	private String lastname;
@@ -56,7 +53,6 @@ public class User implements Serializable, UserDetails {
 	@JsonIgnore
 	private String password;
 
-	@Column(name = "updated_on")
 	private Timestamp updatedOn;
 
 	private String username;
@@ -67,18 +63,6 @@ public class User implements Serializable, UserDetails {
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
 	private List<Role> authRoles;
-
-//	// bi-directional many-to-one association to AdoptionForm
-//	@OneToMany(mappedBy = "approvedBy", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//	@JsonIgnore
-//	@ToString.Exclude
-//	private List<AdoptionForm> approverForms;
-//
-//	// bi-directional many-to-one association to AdoptionForm
-//	@OneToMany(mappedBy = "ownerId", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-//	@JsonIgnore
-//	@ToString.Exclude
-//	private List<AdoptionForm> petOwnerForms;
 
 	// bi-directional many-to-one association to Appointment
 	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -95,34 +79,9 @@ public class User implements Serializable, UserDetails {
 	@ToString.Exclude
 	private List<Pet> pets;
 
-	public User() {
-	}
-
-//	public AdoptionForm addApproverForms(AdoptionForm approverForm) {
-//		getApproverForms().add(approverForm);
-//		approverForm.setApprovedBy(this);
-//		return approverForm;
-//	}
-//
-//	public AdoptionForm removeApproverForms(AdoptionForm approverForm) {
-//		getApproverForms().remove(approverForm);
-//		approverForm.setApprovedBy(null);
-//		return approverForm;
-//	}
-//
-//	public AdoptionForm addPetOwnerForms(AdoptionForm petOwnerForm) {
-//		getPetOwnerForms().add(petOwnerForm);
-//		petOwnerForm.setOwnerId(this);
-//
-//		return petOwnerForm;
-//	}
-//
-//	public AdoptionForm removePetOwnerForms(AdoptionForm petOwnerForm) {
-//		getPetOwnerForms().remove(petOwnerForm);
-//		petOwnerForm.setOwnerId(null);
-//
-//		return petOwnerForm;
-//	}
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "staff_id", referencedColumnName = "id")
+	private Staff staff;
 
 	public Appointment addAppointment(Appointment appointment) {
 		getAppointments().add(appointment);

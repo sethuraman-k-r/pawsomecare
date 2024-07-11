@@ -30,8 +30,4 @@ public class Role {
     @JsonIgnore
     private List<User> users;
 
-    @ManyToMany(mappedBy = "authRoles")
-    @JsonIgnore
-    private List<Staff> staffs;
-
 }

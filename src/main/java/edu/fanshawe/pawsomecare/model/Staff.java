@@ -1,12 +1,16 @@
 package edu.fanshawe.pawsomecare.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -26,48 +30,10 @@ public class Staff implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(unique = true)
-	private String email;
-
-	private String firstname;
-
-	@Column(name = "is_active")
-	private Boolean isActive;
-
-	private String lastname;
-
-	@JsonIgnore
-	private String password;
-
-	@Column(name = "updated_on")
-	private Timestamp updatedOn;
-
-	private String username;
-
 	private double consultFee;
 
-	private String address;
-
-	private double annualIncome;
-
-	private String contact;
-
-	@Column(name = "created_at")
-	private Timestamp createdAt;
-
-	private Timestamp dob;
-
-	@ManyToMany
-	@JoinTable(
-			name = "user_auth_role",
-			joinColumns = @JoinColumn(name = "user_id"),
-			inverseJoinColumns = @JoinColumn(name = "role_id"))
-	private List<Role> authRoles;
-
-	//bi-directional many-to-one association to Appointment
-	@OneToMany(mappedBy="staff")
-	@ToString.Exclude
-	private List<Appointment> appointments;
+	@OneToOne(mappedBy = "staff")
+	private User user;
 
 	//bi-directional many-to-many association to Clinic
 	@ManyToMany
@@ -82,19 +48,5 @@ public class Staff implements Serializable {
 		)
 	@ToString.Exclude
 	private List<Clinic> clinics;
-
-	public Appointment addAppointment(Appointment appointment) {
-		getAppointments().add(appointment);
-		appointment.setStaff(this);
-
-		return appointment;
-	}
-
-	public Appointment removeAppointment(Appointment appointment) {
-		getAppointments().remove(appointment);
-		appointment.setStaff(null);
-
-		return appointment;
-	}
 
 }
