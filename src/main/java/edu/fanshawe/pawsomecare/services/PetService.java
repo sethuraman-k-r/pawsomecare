@@ -38,39 +38,4 @@ public class PetService {
 		return petRepository.save(pet);
 	}
 
-//	public Boolean requestForPetAdoption(AdoptionRequest petAdoption, User user) {
-//		Optional<Pet> petOptional = petRepository.findByIdAndIsAdopted(petAdoption.getPetId(), false);
-//		if(petOptional.isEmpty()) {
-//			return false;
-//		}
-//		AdoptionForm adoptionForm = new AdoptionForm();
-//		Pet pet = petOptional.get();
-//		if(pet.getUser() != null) {
-//			return false;
-//		}
-//		adoptionForm.setPet(pet);
-//		adoptionForm.setCreatedAt(Timestamp.from(Instant.now()));
-//		adoptionForm.setDescription(petAdoption.getDescription());
-//		adoptionForm.setOwnerId(user);
-//		adoptionRepository.save(adoptionForm);
-//		return true;
-//	}
-//
-//	public Boolean approvePetAdoption(Integer adoptId, User user) {
-//		Optional<AdoptionForm> optionalAdoptionForm = adoptionRepository.findById(adoptId);
-//		if(optionalAdoptionForm.isEmpty()) {
-//			return false;
-//		}
-//		AdoptionForm adoptionForm = optionalAdoptionForm.get();
-//		Pet pet = adoptionForm.getPet();
-//		pet.setUser(adoptionForm.getOwnerId());
-//		pet.setIsAdopted(true);
-//		pet.setUpdatedOn(Timestamp.from(Instant.now()));
-//		adoptionForm.setApprovedBy(user);
-//		adoptionForm.setUpdatedOn(Timestamp.from(Instant.now()));
-//		adoptionForm.setPet(pet);
-//		adoptionRepository.save(adoptionForm);
-//		return true;
-//	}
-
 }

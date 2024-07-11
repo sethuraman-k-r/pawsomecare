@@ -3,10 +3,8 @@ package edu.fanshawe.pawsomecare.controller;
 import java.util.List;
 
 import edu.fanshawe.pawsomecare.model.PetCategory;
-import edu.fanshawe.pawsomecare.model.User;
 import edu.fanshawe.pawsomecare.model.request.AddUnAdoptedPetRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import edu.fanshawe.pawsomecare.model.Pet;
@@ -16,10 +14,10 @@ import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("/spca")
-@RolesAllowed("SPCA")
+@RequestMapping("/admin")
+@RolesAllowed("ADMIN")
 @AllArgsConstructor
-public class SPCAController {
+public class AdminController {
 
     private final PetCategoryService petCategoryService;
     private final PetService petService;
@@ -45,11 +43,5 @@ public class SPCAController {
         PetCategory petCategory = petCategoryService.findPetCategory(petRequest.getCategory());
         return ResponseEntity.ok().body(petService.addUnadoptedPet(petRequest, petCategory));
     }
-
-//    @PostMapping("/approve/pet/adopt")
-//    public ResponseEntity<Boolean> approvePetAdopt(@RequestParam("adoptId") Integer adoptId) {
-//        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        return ResponseEntity.ok().body(petService.approvePetAdoption(adoptId, user));
-//    }
 
 }
