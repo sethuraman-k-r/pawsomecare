@@ -57,11 +57,12 @@ public class User implements Serializable, UserDetails {
 
 	private String username;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_auth_role",
 			joinColumns = @JoinColumn(name = "user_id"),
 			inverseJoinColumns = @JoinColumn(name = "role_id"))
+	@JsonIgnore
 	private List<Role> authRoles;
 
 	// bi-directional many-to-one association to Appointment
