@@ -41,6 +41,9 @@ public class Medicine implements Serializable {
 	@Column(name="per_cost")
 	private double perCost;
 
+	@Column
+	private Integer count;
+
 	//bi-directional many-to-many association to Appointment
 	@ManyToMany(mappedBy="medicines")
 	@ToString.Exclude

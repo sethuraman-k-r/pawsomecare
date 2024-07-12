@@ -2,21 +2,16 @@ package edu.fanshawe.pawsomecare.controller;
 
 import java.util.List;
 
-import edu.fanshawe.pawsomecare.model.Grooming;
-import edu.fanshawe.pawsomecare.model.PetCategory;
-import edu.fanshawe.pawsomecare.model.Vaccine;
+import edu.fanshawe.pawsomecare.model.*;
 import edu.fanshawe.pawsomecare.model.request.AddUnAdoptedPetRequest;
 import edu.fanshawe.pawsomecare.model.request.GroomingRequest;
+import edu.fanshawe.pawsomecare.model.request.MedicineRequest;
 import edu.fanshawe.pawsomecare.model.request.VaccineRequest;
-import edu.fanshawe.pawsomecare.services.GroomingService;
-import edu.fanshawe.pawsomecare.services.VaccineService;
+import edu.fanshawe.pawsomecare.services.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import edu.fanshawe.pawsomecare.model.Pet;
-import edu.fanshawe.pawsomecare.services.PetCategoryService;
-import edu.fanshawe.pawsomecare.services.PetService;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 
@@ -30,6 +25,7 @@ public class AdminController {
     private final PetService petService;
     private final GroomingService groomingService;
     private final VaccineService vaccineService;
+    private final MedicineService medicineService;
 
     @GetMapping("/pet/category")
     public ResponseEntity<List<PetCategory>> getPetCategory() {
@@ -76,15 +72,30 @@ public class AdminController {
     }
 
     @PostMapping("/pet/vaccine")
-    public ResponseEntity<Vaccine> addNewGroomingService(@RequestBody @Validated VaccineRequest vaccineRequest) {
+    public ResponseEntity<Vaccine> addNewVaccineService(@RequestBody @Validated VaccineRequest vaccineRequest) {
         Vaccine vaccine = vaccineService.addNewVaccine(vaccineRequest);
         return ResponseEntity.ok().body(vaccine);
     }
 
     @PutMapping("/pet/vaccine")
-    public ResponseEntity<Vaccine> updateGroomingService(@RequestBody @Validated VaccineRequest vaccineRequest) {
+    public ResponseEntity<Vaccine> updateVaccineService(@RequestBody @Validated VaccineRequest vaccineRequest) {
         Vaccine vaccine = vaccineService.updateVaccine(vaccineRequest);
         return ResponseEntity.ok().body(vaccine);
+    }
+
+    @GetMapping("/pet/medicine")
+    public ResponseEntity<List<Medicine>> addNewMedicine() {
+        return ResponseEntity.ok().body(medicineService.getMedicines());
+    }
+
+    @PostMapping("/pet/medicine")
+    public ResponseEntity<Medicine> addNewMedicineService(@RequestBody @Validated MedicineRequest medicineRequest) {
+        return ResponseEntity.ok().body(medicineService.addNewMedicine(medicineRequest));
+    }
+
+    @PutMapping("/pet/medicine")
+    public ResponseEntity<Medicine> updateGroomingService(@RequestBody @Validated MedicineRequest medicineRequest) {
+        return ResponseEntity.ok().body(medicineService.updateMedicine(medicineRequest));
     }
 
 }
