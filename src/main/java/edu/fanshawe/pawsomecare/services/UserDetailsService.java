@@ -3,7 +3,9 @@ package edu.fanshawe.pawsomecare.services;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.Optional;
 
+import edu.fanshawe.pawsomecare.model.Role;
 import edu.fanshawe.pawsomecare.repository.RoleRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -39,13 +41,16 @@ public class UserDetailsService {
 	}
 
 	public User createNewUser(AuthRequest authRequest) {
+		Optional<Role> role = roleRepository.findByRoleTypeEquals("CLIENT");
+		if(userRepository.findAll().isEmpty()) {
+			role = roleRepository.findByRoleTypeEquals("ADMIN");
+		}
 		User user = new User();
 		user.setEmail(authRequest.getEmail());
 		user.setPassword(passwordEncoder.encode(authRequest.getPassword()));
 		user.setUsername(authRequest.getUsername());
 		user.setFirstname(authRequest.getUsername());
-		System.out.println(roleRepository.findByRoleTypeEquals("CLIENT"));
-		user.setAuthRoles(Arrays.asList(roleRepository.findByRoleTypeEquals("CLIENT").orElse(null)));
+		user.setAuthRoles(Arrays.asList(role.orElse(null)));
 		user.setCreatedAt(Timestamp.from(Instant.now()));
 		user.setIsActive(true);
 		user.setUpdatedOn(null);
