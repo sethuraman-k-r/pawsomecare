@@ -27,15 +27,15 @@ public class Grooming implements Serializable {
 
 	private double cost;
 
-	private Integer description;
+	private String description;
 
 	@Column(name="is_ins_allowed")
 	private Boolean isInsAllowed;
 
-	private Integer name;
+	private String name;
 
 	@Column(name="time_require")
-	private Timestamp timeRequire;
+	private Integer timeRequire;
 
 	//bi-directional many-to-many association to Appointment
 	@ManyToMany
