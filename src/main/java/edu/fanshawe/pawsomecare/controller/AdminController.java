@@ -22,17 +22,17 @@ public class AdminController {
     private final PetCategoryService petCategoryService;
     private final PetService petService;
 
-    @GetMapping("/category")
+    @GetMapping("/pet/category")
     public ResponseEntity<List<PetCategory>> getPetCategory() {
         return ResponseEntity.ok().body(petCategoryService.getPetCategoryList());
     }
 
-    @PostMapping("/category")
+    @PostMapping("/pet/category")
     public ResponseEntity<PetCategory> addPetCategory(@RequestParam("name") String name) {
         return ResponseEntity.ok().body(petCategoryService.addNewPetCategory(name));
     }
 
-    @PutMapping("/category")
+    @PutMapping("/pet/category")
     public ResponseEntity<PetCategory> updatePetCategory(@RequestParam("name") String name,
                                                          @RequestParam(required = false, name = "active", defaultValue = "true") Boolean isActive) {
         return ResponseEntity.ok().body(petCategoryService.updatePetCategory(name, isActive));

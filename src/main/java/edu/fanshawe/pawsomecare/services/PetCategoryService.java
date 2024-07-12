@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.services;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,7 +17,9 @@ public class PetCategoryService {
 	private final CategoryRepository categoryRepository;
 
 	public List<PetCategory> getPetCategoryList() {
-		return categoryRepository.findAll();
+		List<PetCategory> categories = categoryRepository.findAll();
+		categories.sort(Comparator.comparing(o -> o.getId()));
+		return categories;
 	}
 
 	public PetCategory addNewPetCategory(String name) {
