@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/common")
-@RolesAllowed({"USER", "SPCA", "ASA"})
+@RolesAllowed({"CLIENT", "ADMIN", "VETERINARIAN"})
 @AllArgsConstructor
 public class StandardController {
 

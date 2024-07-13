@@ -34,7 +34,7 @@ public class SecurityConfig {
 				(request, response, ex) -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage())));
 
 		http.authorizeHttpRequests(t -> {
-			t.requestMatchers("/auth/public/**").permitAll().anyRequest().authenticated();
+			t.requestMatchers("/auth/public/**", "/v3/**", "/swagger-ui/**").permitAll().anyRequest().authenticated();
 		});
 
 		http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);

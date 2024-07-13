@@ -1,5 +1,7 @@
 package edu.fanshawe.pawsomecare.config;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -20,8 +22,15 @@ public class JwtTokenUtil {
 
 	public String generateAccessToken(User user) throws Exception {
 		try {
+			Date now = new Date();
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(now);
+			cal.add(Calendar.MINUTE, 30);
 			Algorithm algorithm = Algorithm.HMAC256(SECRET);
-			String token = JWT.create().withClaim("user", user.getEmail()).withIssuer("auth0").sign(algorithm);
+			String token = JWT.create().withClaim("user", user.getEmail())
+					.withIssuedAt(now)
+					.withExpiresAt(cal.getTime())
+					.withIssuer("auth0").sign(algorithm);
 			return token;
 		} catch (JWTCreationException exception) {
 			throw new Exception("Error in creating the JWT token");
