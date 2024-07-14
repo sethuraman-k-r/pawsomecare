@@ -20,9 +20,9 @@ public class StandardController {
 
     private final PetService petService;
 
-    @GetMapping("/pet")
-    public ResponseEntity<List<Pet>> getUnAdoptedPets(@RequestParam("isAdopt") Boolean isAdopt) {
-        return ResponseEntity.ok().body(petService.getUnadoptedPet(isAdopt));
+    @GetMapping("/pet/unadopted")
+    public ResponseEntity<List<Pet>> getUnAdoptedPets() {
+        return ResponseEntity.ok().body(petService.getUnadoptedPet(false));
     }
 
 }
