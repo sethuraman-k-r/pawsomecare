@@ -70,7 +70,6 @@ public class Pet implements Serializable {
 	//bi-directional many-to-one association to Category
 	@ManyToOne
 	@ToString.Exclude
-	@JsonIgnore
 	private PetCategory petCategory;
 
 	//bi-directional many-to-one association to LicenseForm
