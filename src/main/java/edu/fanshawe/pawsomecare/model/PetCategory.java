@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -32,6 +33,7 @@ public class PetCategory implements Serializable {
 	//bi-directional many-to-one association to Pet
 	@OneToMany(mappedBy= "petCategory")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Pet> pets;
 
 	public Pet addPet(Pet pet) {
