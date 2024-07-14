@@ -3,10 +3,7 @@ package edu.fanshawe.pawsomecare.controller;
 import java.util.List;
 
 import edu.fanshawe.pawsomecare.model.*;
-import edu.fanshawe.pawsomecare.model.request.AddUnAdoptedPetRequest;
-import edu.fanshawe.pawsomecare.model.request.GroomingRequest;
-import edu.fanshawe.pawsomecare.model.request.MedicineRequest;
-import edu.fanshawe.pawsomecare.model.request.VaccineRequest;
+import edu.fanshawe.pawsomecare.model.request.*;
 import edu.fanshawe.pawsomecare.services.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +23,7 @@ public class AdminController {
     private final GroomingService groomingService;
     private final VaccineService vaccineService;
     private final MedicineService medicineService;
+    private final ClinicService clinicService;
 
     @GetMapping("/pet/category")
     public ResponseEntity<List<PetCategory>> getPetCategory() {
@@ -96,6 +94,21 @@ public class AdminController {
     @PutMapping("/pet/medicine")
     public ResponseEntity<Medicine> updateGroomingService(@RequestBody @Validated MedicineRequest medicineRequest) {
         return ResponseEntity.ok().body(medicineService.updateMedicine(medicineRequest));
+    }
+
+    @GetMapping("/pet/clinic")
+    public ResponseEntity<List<Clinic>> addNewClinic() {
+        return ResponseEntity.ok().body(clinicService.getClinic());
+    }
+
+    @PostMapping("/pet/clinic")
+    public ResponseEntity<Clinic> addNewClinicService(@RequestBody @Validated ClinicRequest clinicRequest) {
+        return ResponseEntity.ok().body(clinicService.addNewClinic(clinicRequest));
+    }
+
+    @PutMapping("/pet/clinic")
+    public ResponseEntity<Clinic> updateClinicService(@RequestBody @Validated ClinicRequest clinicRequest) {
+        return ResponseEntity.ok().body(clinicService.updateClinic(clinicRequest));
     }
 
 }
