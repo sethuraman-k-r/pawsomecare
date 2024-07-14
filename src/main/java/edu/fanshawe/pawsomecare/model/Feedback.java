@@ -30,6 +30,7 @@ public class Feedback implements Serializable {
 	@Column(name="created_at")
 	private Timestamp createdAt;
 
+	@Column(length = 2000)
 	private String description;
 
 	private Integer rate;

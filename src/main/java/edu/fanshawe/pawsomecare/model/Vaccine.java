@@ -30,6 +30,7 @@ public class Vaccine implements Serializable {
 	@Column(name="created_on")
 	private Timestamp createdOn;
 
+	@Column(length = 2000)
 	private String description;
 
 	@Column(name="is_ins_allowed")

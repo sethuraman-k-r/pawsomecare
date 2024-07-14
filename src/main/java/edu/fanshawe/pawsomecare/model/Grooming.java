@@ -27,6 +27,7 @@ public class Grooming implements Serializable {
 
 	private double cost;
 
+	@Column(length = 2000)
 	private String description;
 
 	@Column(name="is_ins_allowed")

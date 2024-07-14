@@ -28,6 +28,7 @@ public class Medicine implements Serializable {
 	@Column(name="created_on")
 	private Timestamp createdOn;
 
+	@Column(length = 2000)
 	private String description;
 
 	@Column(name="expires_at")

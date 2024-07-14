@@ -28,6 +28,7 @@ public class AdoptionForm implements Serializable {
 	@Column(name="created_at")
 	private Timestamp createdAt;
 
+	@Column(length = 2000)
 	private String description;
 
 	@Column(name="updated_on")

@@ -24,12 +24,15 @@ public class Clinic implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
+	@Column(length = 2000)
 	private String address;
 
+	@Column(length = 2000)
 	private String description;
 
 	private String name;
 
+	@Column(length = 2000)
 	private String specialities;
 
 	//bi-directional many-to-one association to Appointment

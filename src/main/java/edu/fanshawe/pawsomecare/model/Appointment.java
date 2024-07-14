@@ -30,7 +30,7 @@ public class Appointment implements Serializable {
 	@Column(name="appt_time")
 	private Timestamp apptTime;
 
-	@Column(name="consult_detail")
+	@Column(name="consult_detail", length = 3000)
 	private String consultDetail;
 
 	@Column(name="created_at")
@@ -48,6 +48,7 @@ public class Appointment implements Serializable {
 	@Column(name="next_visit_suggest")
 	private Timestamp nextVisitSuggest;
 
+	@Column(length = 3000)
 	private String reason;
 
 	@Column(name="tablet_prescribed")
