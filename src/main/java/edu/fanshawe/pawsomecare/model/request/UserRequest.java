@@ -2,6 +2,7 @@ package edu.fanshawe.pawsomecare.model.request;
 
 import java.util.Date;
 
+import edu.fanshawe.pawsomecare.model.Gender;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -17,5 +18,6 @@ public class UserRequest {
 	private Date dob;
 	private String address;
 	private String contact;
+	private Gender gender;
 	
 }

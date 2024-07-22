@@ -57,6 +57,8 @@ public class User implements Serializable, UserDetails {
 
 	private String username;
 
+	private Gender gender;
+
 	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "user_auth_role",
@@ -80,7 +82,7 @@ public class User implements Serializable, UserDetails {
 	@ToString.Exclude
 	private List<Pet> pets;
 
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne
 	@JoinColumn(name = "staff_id", referencedColumnName = "id")
 	private Staff staff;
 

@@ -3,10 +3,16 @@ package edu.fanshawe.pawsomecare.services;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
+import edu.fanshawe.pawsomecare.model.Clinic;
 import edu.fanshawe.pawsomecare.model.Role;
+import edu.fanshawe.pawsomecare.model.Staff;
+import edu.fanshawe.pawsomecare.model.request.AddStaffRequest;
+import edu.fanshawe.pawsomecare.repository.ClinicRepository;
 import edu.fanshawe.pawsomecare.repository.RoleRepository;
+import edu.fanshawe.pawsomecare.repository.StaffRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,6 +33,8 @@ public class UserDetailsService {
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
 	private final RoleRepository roleRepository;
+	private final StaffRepository staffRepository;
+	private final ClinicRepository clinicRepository;
 
 	public UserDetails loadUserByUsername(String username, String password) throws UsernameNotFoundException {
 		User user = userRepository.findByEmail(username);
@@ -77,6 +85,10 @@ public class UserDetailsService {
 		if (userRequest.getContact() != null) {
 			user.setContact(userRequest.getContact());
 		}
+		if(userRequest.getGender() != null) {
+			user.setGender(userRequest.getGender());
+		}
+		user.setUpdatedOn(Timestamp.from(Instant.now()));
 		return userRepository.save(user);
 	}
 
@@ -91,5 +103,36 @@ public class UserDetailsService {
 		}
 		throw new Exception("Incorrect password");
 	}
+
+	public User addNewClinicalStaff(AddStaffRequest staffRequest) {
+		Optional<Staff> oStaff = staffRepository.findById(staffRequest.getStaffId());
+		List<Clinic> clinics = clinicRepository.findByIdIn(staffRequest.getClinicIds());
+		Optional<Role> oRole = roleRepository.findByRoleTypeEquals(staffRequest.getUserRole());
+		boolean canStaffAdd = oStaff.isEmpty();
+		if(canStaffAdd) {
+			Staff staff = new Staff();
+			User user = new User();
+
+			staff.setId(staffRequest.getStaffId());
+			staff.setConsultFee(staffRequest.getConsultFee());
+			staff.setClinics(clinics);
+			staffRepository.save(staff);
+
+			user.setUsername(staffRequest.getStaffName());
+			user.setFirstname(staffRequest.getStaffName());
+			user.setEmail(staffRequest.getEmail());
+			user.setGender(staffRequest.getGender());
+			user.setIsActive(true);
+			user.setCreatedAt(Timestamp.from(Instant.now()));
+			user.setPassword(passwordEncoder.encode(staffRequest.getStaffId().toString()));
+			user.setAuthRoles(Arrays.asList(oRole.get()));
+			user.setStaff(staff);
+			userRepository.save(user);
+
+			return user;
+		}
+		return oStaff.get().getUser();
+	}
+
 
 }

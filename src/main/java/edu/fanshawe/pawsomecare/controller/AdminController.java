@@ -24,6 +24,7 @@ public class AdminController {
     private final VaccineService vaccineService;
     private final MedicineService medicineService;
     private final ClinicService clinicService;
+    private final UserDetailsService userDetailsService;
 
     @GetMapping("/pet/category")
     public ResponseEntity<List<PetCategory>> getPetCategory() {
@@ -109,6 +110,11 @@ public class AdminController {
     @PutMapping("/pet/clinic")
     public ResponseEntity<Clinic> updateClinicService(@RequestBody @Validated ClinicRequest clinicRequest) {
         return ResponseEntity.ok().body(clinicService.updateClinic(clinicRequest));
+    }
+
+    @PostMapping("/pet/staff")
+    public ResponseEntity<User> addNewClinicStaff(@RequestBody @Validated AddStaffRequest staffRequest) {
+        return ResponseEntity.ok().body(userDetailsService.addNewClinicalStaff(staffRequest));
     }
 
 }

@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -27,12 +28,13 @@ public class Staff implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
 	private double consultFee;
 
 	@OneToOne(mappedBy = "staff")
+	@ToString.Exclude
+	@JsonIgnore
 	private User user;
 
 	//bi-directional many-to-many association to Clinic
@@ -47,6 +49,7 @@ public class Staff implements Serializable {
 			}
 		)
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Clinic> clinics;
 
 }
