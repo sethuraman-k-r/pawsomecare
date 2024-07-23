@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -37,22 +38,34 @@ public class LicenseForm implements Serializable {
 	@Column(name="issued_at")
 	private Timestamp issuedAt;
 
-	@Column(name="license_no")
+	@Column(name="license_no", unique = true, nullable = false)
 	private String licenseNo;
 
 	//bi-directional many-to-one association to Pet
 	@ManyToOne
+	@JsonIgnore
 	private Pet pet;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="owner_id")
+	@JsonIgnore
 	private User user;
 
 	//bi-directional many-to-one association to Pet
 	@OneToMany(mappedBy="licenseForm")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Pet> pets;
+
+	@Column(length = 2000)
+	private String description;
+
+	@Transient
+	private User owner;
+
+	@Transient
+	private Pet animal;
 
 	public Pet addPet(Pet pet) {
 		getPets().add(pet);

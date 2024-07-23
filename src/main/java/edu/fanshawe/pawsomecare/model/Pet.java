@@ -64,7 +64,6 @@ public class Pet implements Serializable {
 	//bi-directional many-to-one association to LicenseForm
 	@OneToMany(mappedBy="pet")
 	@ToString.Exclude
-	@JsonIgnore
 	private List<LicenseForm> licenseForms;
 
 	//bi-directional many-to-one association to Category
@@ -75,7 +74,6 @@ public class Pet implements Serializable {
 	//bi-directional many-to-one association to LicenseForm
 	@ManyToOne
 	@JoinColumn(name="license_id")
-	@JsonIgnore
 	private LicenseForm licenseForm;
 
 	//bi-directional many-to-one association to User

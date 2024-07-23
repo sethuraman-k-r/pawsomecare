@@ -1,6 +1,7 @@
 package edu.fanshawe.pawsomecare.controller;
 
 import java.util.List;
+import java.util.Map;
 
 import edu.fanshawe.pawsomecare.model.*;
 import edu.fanshawe.pawsomecare.model.request.*;
@@ -32,14 +33,15 @@ public class AdminController {
     }
 
     @PostMapping("/pet/category")
-    public ResponseEntity<PetCategory> addPetCategory(@RequestParam("name") String name) {
-        return ResponseEntity.ok().body(petCategoryService.addNewPetCategory(name));
+    public ResponseEntity<PetCategory> addPetCategory(@RequestParam("name") String name, @RequestParam("cost") double cost) {
+        return ResponseEntity.ok().body(petCategoryService.addNewPetCategory(name, cost));
     }
 
     @PutMapping("/pet/category")
     public ResponseEntity<PetCategory> updatePetCategory(@RequestParam("name") String name,
-                                                         @RequestParam(required = false, name = "active", defaultValue = "true") Boolean isActive) {
-        return ResponseEntity.ok().body(petCategoryService.updatePetCategory(name, isActive));
+                                                         @RequestParam(required = false, name = "active", defaultValue = "true") Boolean isActive,
+                                                         @RequestParam("cost") double cost) {
+        return ResponseEntity.ok().body(petCategoryService.updatePetCategory(name, isActive, cost));
     }
 
     @PostMapping("/pet/new/unadopt")
@@ -115,6 +117,16 @@ public class AdminController {
     @PostMapping("/pet/staff")
     public ResponseEntity<User> addNewClinicStaff(@RequestBody @Validated AddStaffRequest staffRequest) {
         return ResponseEntity.ok().body(userDetailsService.addNewClinicalStaff(staffRequest));
+    }
+
+    @GetMapping("/pet/license")
+    public ResponseEntity<List<LicenseForm>> getAppliedLicense() {
+        return ResponseEntity.ok().body(petService.getAppliedPetLicense());
+    }
+
+    @PutMapping("/pet/license/{licenseId}")
+    public ResponseEntity<Boolean> addNewClinicService(@PathVariable("licenseId") Integer licenseId) {
+        return ResponseEntity.ok().body(petService.approvePetLicense(licenseId));
     }
 
 }

@@ -30,6 +30,9 @@ public class PetCategory implements Serializable {
 	@Column(unique = true)
 	private String name;
 
+	@Column
+	private double licenseCost;
+
 	//bi-directional many-to-one association to Pet
 	@OneToMany(mappedBy= "petCategory")
 	@ToString.Exclude
