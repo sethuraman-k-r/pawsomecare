@@ -5,6 +5,7 @@ import java.util.Map;
 
 import edu.fanshawe.pawsomecare.model.*;
 import edu.fanshawe.pawsomecare.model.request.*;
+import edu.fanshawe.pawsomecare.repository.UserRepository;
 import edu.fanshawe.pawsomecare.services.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -26,6 +27,7 @@ public class AdminController {
     private final MedicineService medicineService;
     private final ClinicService clinicService;
     private final UserDetailsService userDetailsService;
+    private final UserRepository userRepository;
 
     @GetMapping("/pet/category")
     public ResponseEntity<List<PetCategory>> getPetCategory() {
@@ -117,6 +119,11 @@ public class AdminController {
     @PostMapping("/pet/staff")
     public ResponseEntity<User> addNewClinicStaff(@RequestBody @Validated AddStaffRequest staffRequest) {
         return ResponseEntity.ok().body(userDetailsService.addNewClinicalStaff(staffRequest));
+    }
+
+    @GetMapping("/pet/staff")
+    public ResponseEntity<List<User>> getClinicStaff() {
+        return ResponseEntity.ok().body(userDetailsService.getClinicStaffs());
     }
 
     @GetMapping("/pet/license")

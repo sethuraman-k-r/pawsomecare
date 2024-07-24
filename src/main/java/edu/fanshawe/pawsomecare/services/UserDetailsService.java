@@ -134,5 +134,10 @@ public class UserDetailsService {
 		return oStaff.get().getUser();
 	}
 
+	public List<User> getClinicStaffs() {
+		List<Role> staffRoles = roleRepository.findByRoleTypeIn(Arrays.asList("VETERINARIAN", "GROOMING"));
+		List<User> staffs = userRepository.findByAuthRolesIn(staffRoles);
+		return staffs;
+	}
 
 }

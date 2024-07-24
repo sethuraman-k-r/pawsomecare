@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,20 +40,21 @@ public class Vaccine implements Serializable {
 	private String name;
 
 	//bi-directional many-to-one association to Appointment
-	@OneToMany(mappedBy="vaccineBean")
+	@OneToMany(mappedBy="vaccine")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Appointment> appointments;
 
 	public Appointment addAppointment(Appointment appointment) {
 		getAppointments().add(appointment);
-		appointment.setVaccineBean(this);
+		appointment.setVaccine(this);
 
 		return appointment;
 	}
 
 	public Appointment removeAppointment(Appointment appointment) {
 		getAppointments().remove(appointment);
-		appointment.setVaccineBean(null);
+		appointment.setVaccine(null);
 
 		return appointment;
 	}

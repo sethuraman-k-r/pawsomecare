@@ -85,7 +85,7 @@ public class Appointment implements Serializable {
 	//bi-directional many-to-one association to Vaccine
 	@ManyToOne
 	@JoinColumn(name="vaccine")
-	private Vaccine vaccineBean;
+	private Vaccine vaccine;
 
 	//bi-directional many-to-one association to Staff
 	@ManyToOne

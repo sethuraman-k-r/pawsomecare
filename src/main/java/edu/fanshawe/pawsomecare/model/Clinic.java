@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,11 +39,13 @@ public class Clinic implements Serializable {
 	//bi-directional many-to-one association to Appointment
 	@OneToMany(mappedBy="clinicBean")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Appointment> appointments;
 
 	//bi-directional many-to-many association to Staff
 	@ManyToMany(mappedBy="clinics")
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Staff> staffs;
 
 	public Appointment addAppointment(Appointment appointment) {

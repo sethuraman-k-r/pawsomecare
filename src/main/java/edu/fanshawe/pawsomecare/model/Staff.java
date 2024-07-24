@@ -49,7 +49,6 @@ public class Staff implements Serializable {
 			}
 		)
 	@ToString.Exclude
-	@JsonIgnore
 	private List<Clinic> clinics;
 
 }
