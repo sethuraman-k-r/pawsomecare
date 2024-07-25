@@ -123,7 +123,7 @@ public class AdminController {
 
     @GetMapping("/pet/staff")
     public ResponseEntity<List<User>> getClinicStaff() {
-        return ResponseEntity.ok().body(userDetailsService.getClinicStaffs());
+        return ResponseEntity.ok().body(userDetailsService.getClinicStaffs(true));
     }
 
     @GetMapping("/pet/license")

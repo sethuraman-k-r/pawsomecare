@@ -6,3 +6,7 @@ INSERT INTO users (email, password, username, firstname, is_active, role, annual
 INSERT INTO public.user_roles(
 	id, role_type)
 	VALUES (1, 'CLIENT'), (2, 'ADMIN'), (3, 'VETERINARIAN'), (4, 'GROOMING');
+
+INSERT INTO public.pet_service(
+	id, service_name)
+	VALUES (1, 0), (2, 1), (3, 2);

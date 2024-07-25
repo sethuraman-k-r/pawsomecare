@@ -68,17 +68,18 @@ public class User implements Serializable, UserDetails {
 	private List<Role> authRoles;
 
 	// bi-directional many-to-one association to Appointment
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+	@JsonIgnore
 	private List<Appointment> appointments;
 
 	// bi-directional many-to-one association to LicenseForm
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	@JsonIgnore
 	@ToString.Exclude
 	private List<LicenseForm> licenseForms;
 
 	// bi-directional many-to-one association to Pet
-	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
 	@ToString.Exclude
 	private List<Pet> pets;
 

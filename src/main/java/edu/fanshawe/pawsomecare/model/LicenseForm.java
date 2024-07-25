@@ -44,12 +44,14 @@ public class LicenseForm implements Serializable {
 	//bi-directional many-to-one association to Pet
 	@ManyToOne
 	@JsonIgnore
+	@ToString.Exclude
 	private Pet pet;
 
 	//bi-directional many-to-one association to User
 	@ManyToOne
 	@JoinColumn(name="owner_id")
 	@JsonIgnore
+	@ToString.Exclude
 	private User user;
 
 	//bi-directional many-to-one association to Pet

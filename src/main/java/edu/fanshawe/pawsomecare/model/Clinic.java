@@ -37,7 +37,7 @@ public class Clinic implements Serializable {
 	private String specialities;
 
 	//bi-directional many-to-one association to Appointment
-	@OneToMany(mappedBy="clinicBean")
+	@OneToMany(mappedBy="clinic")
 	@ToString.Exclude
 	@JsonIgnore
 	private List<Appointment> appointments;
@@ -50,14 +50,14 @@ public class Clinic implements Serializable {
 
 	public Appointment addAppointment(Appointment appointment) {
 		getAppointments().add(appointment);
-		appointment.setClinicBean(this);
+		appointment.setClinic(this);
 
 		return appointment;
 	}
 
 	public Appointment removeAppointment(Appointment appointment) {
 		getAppointments().remove(appointment);
-		appointment.setClinicBean(null);
+		appointment.setClinic(null);
 
 		return appointment;
 	}

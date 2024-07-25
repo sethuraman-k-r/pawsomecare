@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -50,6 +51,7 @@ public class Grooming implements Serializable {
 			}
 		)
 	@ToString.Exclude
+	@JsonIgnore
 	private List<Appointment> appointments;
 
 }

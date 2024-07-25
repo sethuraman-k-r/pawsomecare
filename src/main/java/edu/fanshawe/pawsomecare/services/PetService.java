@@ -1,23 +1,16 @@
 package edu.fanshawe.pawsomecare.services;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import edu.fanshawe.pawsomecare.model.*;
-import edu.fanshawe.pawsomecare.model.request.AddUnAdoptedPetRequest;
-import edu.fanshawe.pawsomecare.model.request.AdoptionRequest;
-import edu.fanshawe.pawsomecare.model.request.ApplyLicenseRequest;
-import edu.fanshawe.pawsomecare.model.request.UpdatePetRequest;
-import edu.fanshawe.pawsomecare.repository.AdoptionRepository;
-import edu.fanshawe.pawsomecare.repository.LicenseFormRepository;
-import edu.fanshawe.pawsomecare.repository.UserRepository;
+import edu.fanshawe.pawsomecare.model.request.*;
+import edu.fanshawe.pawsomecare.repository.*;
 import org.springframework.stereotype.Service;
 
-import edu.fanshawe.pawsomecare.repository.PetRepository;
 import lombok.AllArgsConstructor;
 
 @Service
@@ -25,9 +18,9 @@ import lombok.AllArgsConstructor;
 public class PetService {
 
 	private final PetRepository petRepository;
-	private final AdoptionRepository adoptionRepository;
 	private final UserRepository userRepository;
 	private final LicenseFormRepository licenseFormRepository;
+	private final ServiceRepository serviceRepository;
 
 	public List<Pet> getUnadoptedPet(boolean isAdopt) {
 		return petRepository.findByIsAdopted(isAdopt);
@@ -151,6 +144,10 @@ public class PetService {
 			return true;
 		}
 		return false;
+	}
+
+	public List<edu.fanshawe.pawsomecare.model.Service> getPetServices() {
+		return serviceRepository.findAll();
 	}
 
 }

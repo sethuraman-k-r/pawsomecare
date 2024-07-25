@@ -51,22 +51,18 @@ public class Appointment implements Serializable {
 	@Column(length = 3000)
 	private String reason;
 
+	private AppointmentStatus status;
+
 	@Column(name="tablet_prescribed")
 	private String tabletPrescribed;
 
 	@Column(name="updated_on")
 	private Timestamp updatedOn;
 
-	@Column(name="vaccine_dose")
-	private double vaccineDose;
-
-	@Column(name="vaccine_other")
-	private String vaccineOther;
-
 	//bi-directional many-to-one association to Clinic
 	@ManyToOne
 	@JoinColumn(name="clinic")
-	private Clinic clinicBean;
+	private Clinic clinic;
 
 	//bi-directional many-to-one association to Feedback
 	@ManyToOne
@@ -91,6 +87,9 @@ public class Appointment implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="staff_id")
 	private Staff staff;
+
+	@Transient
+	public User staffDetails;
 
 	//bi-directional many-to-many association to Medicine
 	@ManyToMany

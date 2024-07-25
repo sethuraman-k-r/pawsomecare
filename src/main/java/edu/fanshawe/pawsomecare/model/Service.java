@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,9 +24,11 @@ public class Service {
     private Integer id;
 
     @Column
-    private String serviceName;
+    private OfferService serviceName;
 
     @OneToMany(mappedBy="service")
+    @JsonIgnore
+    @ToString.Exclude
     private List<Appointment> appointments;
 
 }
