@@ -85,6 +85,7 @@ public class AppointmentService {
         appointment.setConsultDetail(finishAppointment.getAnalysis());
         appointment.setNextVisitSuggest(Timestamp.from(finishAppointment.getNextTime().toInstant()));
         AtomicReference<Double> medicineCost = new AtomicReference<>(0.0d);
+        Map<String, Object> presInfo = new HashMap<>();
         List<Map<String, Object>> presMeds = new ArrayList<>();
         if(finishAppointment.getMedicines() != null) {
             finishAppointment.getMedicines().stream().forEach(m -> {
@@ -105,12 +106,14 @@ public class AppointmentService {
                     medInfo.put("evng", med.get("evng"));
                     medInfo.put("ngt", med.get("night"));
                     medInfo.put("count", numbers);
+                    medInfo.put("cost", (medicine.getPerCost() * numbers));
                     presMeds.add(medInfo);
                 }
             });
         }
-        appointment.setTabletPrescribed(objectMapper.writeValueAsString(presMeds));
 
+
+        Map<String, Object> vac = new HashMap<>();
         Double vaccineCost = 0.0d;
         if(finishAppointment.getVaccineId() != -1 && finishAppointment.getVaccineId() != null) {
             Optional<Vaccine> oVaccine = vaccineRepository.findById(finishAppointment.getVaccineId());
@@ -118,17 +121,31 @@ public class AppointmentService {
                 Vaccine vaccine = oVaccine.get();
                 appointment.setVaccine(vaccine);
                 vaccineCost += vaccine.getAmount();
+                vac.put("name", vaccine.getName());
+                vac.put("cost", vaccineCost);
             }
         }
 
+        List<Map<String, Object>> grooms = new ArrayList<>();
         AtomicReference<Double> groomingCost = new AtomicReference<>(0.0d);
         if(appointment.getGroomings() != null) {
             appointment.getGroomings().forEach(g -> {
+                Map<String, Object> groom = new HashMap<>();
                 groomingCost.updateAndGet(v -> v + g.getCost());
+                groom.put("name", g.getName());
+                groom.put("cost", g.getCost());
+                grooms.add(groom);
             });
         }
 
-        Double finalAmount = vaccineCost + groomingCost.get() + medicineCost.get();
+        presInfo.put("medicine", presMeds);
+        presInfo.put("vaccine", Arrays.asList(vac));
+        presInfo.put("grooming", grooms);
+        presInfo.put("fee", appointment.getStaff().getConsultFee());
+
+        appointment.setTabletPrescribed(objectMapper.writeValueAsString(presInfo));
+
+        Double finalAmount = vaccineCost + groomingCost.get() + medicineCost.get() + appointment.getStaff().getConsultFee();
         appointment.setAmount(finalAmount);
         appointment.setUpdatedOn(Timestamp.from(Instant.now()));
         appointment.setStatus(AppointmentStatus.CLOSED);
