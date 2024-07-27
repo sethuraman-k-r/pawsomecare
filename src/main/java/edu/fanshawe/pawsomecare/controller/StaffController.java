@@ -1,14 +1,8 @@
 package edu.fanshawe.pawsomecare.controller;
 
 import edu.fanshawe.pawsomecare.model.*;
-import edu.fanshawe.pawsomecare.model.request.AdoptionRequest;
-import edu.fanshawe.pawsomecare.model.request.ApplyLicenseRequest;
-import edu.fanshawe.pawsomecare.model.request.AppointmentRequest;
-import edu.fanshawe.pawsomecare.model.request.UpdatePetRequest;
-import edu.fanshawe.pawsomecare.services.AppointmentService;
-import edu.fanshawe.pawsomecare.services.ClinicService;
-import edu.fanshawe.pawsomecare.services.PetService;
-import edu.fanshawe.pawsomecare.services.UserDetailsService;
+import edu.fanshawe.pawsomecare.model.request.*;
+import edu.fanshawe.pawsomecare.services.*;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +19,9 @@ import java.util.List;
 public class StaffController {
 
     private final AppointmentService appointmentService;
+    private final VaccineService vaccineService;
+    private final MedicineService medicineService;
+    private final GroomingService groomingService;
 
     @GetMapping("pet/appointments")
     public ResponseEntity<List<Appointment>> getAppointments() throws Exception {
@@ -37,15 +34,30 @@ public class StaffController {
         }
     }
 
-    @PutMapping("pet/book/appointment")
-    public ResponseEntity<Appointment> doUpdateAppointment(@RequestBody @Validated AppointmentRequest appointmentRequest) throws Exception {
+    @PutMapping("pet/finish/appointment")
+    public ResponseEntity<Boolean> doFinishAppointment(@RequestBody @Validated FinishAppointment finishAppointment) throws Exception {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            Appointment appointment = appointmentService.bookAppointment(appointmentRequest, user);
-            return ResponseEntity.ok().body(appointment);
+            appointmentService.finishAppointment(finishAppointment, user);
+            return ResponseEntity.ok().body(true);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().header("error", ex.getLocalizedMessage()).build();
         }
+    }
+
+    @GetMapping("/pet/vaccine")
+    public ResponseEntity<List<Vaccine>> addNewVaccine() {
+        return ResponseEntity.ok().body(vaccineService.getVaccineList());
+    }
+
+    @GetMapping("/pet/medicine")
+    public ResponseEntity<List<Medicine>> addNewMedicine() {
+        return ResponseEntity.ok().body(medicineService.getMedicines());
+    }
+
+    @GetMapping("/pet/groom")
+    public ResponseEntity<List<Grooming>> addNewGroomingService() {
+        return ResponseEntity.ok().body(groomingService.getGroomingList());
     }
 
 }

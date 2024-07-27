@@ -1,17 +1,17 @@
 package edu.fanshawe.pawsomecare.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.fanshawe.pawsomecare.model.*;
-import edu.fanshawe.pawsomecare.model.request.AdoptionRequest;
 import edu.fanshawe.pawsomecare.model.request.AppointmentRequest;
+import edu.fanshawe.pawsomecare.model.request.FinishAppointment;
 import edu.fanshawe.pawsomecare.repository.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 @Service
@@ -20,10 +20,13 @@ public class AppointmentService {
 
     private final ClinicRepository clinicRepository;
     private final StaffRepository staffRepository;
+    private final VaccineRepository vaccineRepository;
     private final PetRepository petRepository;
     private final AppointmentRepository appointmentRepository;
     private final ServiceRepository serviceRepository;
     private final GroomingRepository groomingRepository;
+    private final MedicineRepository medicineRepository;
+    private final ObjectMapper objectMapper;
 
     public Appointment bookAppointment(AppointmentRequest appointmentRequest, User user) throws Exception {
         Optional<Pet> oPet = petRepository.findById(appointmentRequest.getPetId());
@@ -69,6 +72,67 @@ public class AppointmentService {
                 return grooming;
             }).collect(Collectors.toUnmodifiableList()));
         }
+
+        return appointment;
+    }
+
+    public Appointment finishAppointment(FinishAppointment finishAppointment, User user) throws Exception {
+        Optional<Appointment> oAppt = appointmentRepository.findByIdAndStaff(finishAppointment.getAppointmentId(), user.getStaff());
+        if(oAppt.isEmpty()) {
+            throw new Exception("Appointment is not present");
+        }
+        Appointment appointment = oAppt.get();
+        appointment.setConsultDetail(finishAppointment.getAnalysis());
+        appointment.setNextVisitSuggest(Timestamp.from(finishAppointment.getNextTime().toInstant()));
+        AtomicReference<Double> medicineCost = new AtomicReference<>(0.0d);
+        List<Map<String, Object>> presMeds = new ArrayList<>();
+        if(finishAppointment.getMedicines() != null) {
+            finishAppointment.getMedicines().stream().forEach(m -> {
+                Map<String, Object> med = m;
+                Integer medicineId = (Integer) med.get("id");
+                Integer numbers = (Integer) med.get("nos");
+                Optional<Medicine> oMedicine = medicineRepository.findById(medicineId);
+                if(oMedicine.isPresent()) {
+                    Medicine medicine = oMedicine.get();
+                    medicine.setCount(medicine.getCount() - numbers);
+                    medicineRepository.save(medicine);
+                    medicineCost.updateAndGet(v -> v + (medicine.getPerCost() * numbers));
+
+                    Map<String, Object> medInfo = new HashMap<>();
+                    medInfo.put("medicine", medicine.getName());
+                    medInfo.put("mrng", med.get("mrng"));
+                    medInfo.put("noon", med.get("noon"));
+                    medInfo.put("evng", med.get("evng"));
+                    medInfo.put("ngt", med.get("night"));
+                    medInfo.put("count", numbers);
+                    presMeds.add(medInfo);
+                }
+            });
+        }
+        appointment.setTabletPrescribed(objectMapper.writeValueAsString(presMeds));
+
+        Double vaccineCost = 0.0d;
+        if(finishAppointment.getVaccineId() != -1 && finishAppointment.getVaccineId() != null) {
+            Optional<Vaccine> oVaccine = vaccineRepository.findById(finishAppointment.getVaccineId());
+            if(oVaccine.isPresent()) {
+                Vaccine vaccine = oVaccine.get();
+                appointment.setVaccine(vaccine);
+                vaccineCost += vaccine.getAmount();
+            }
+        }
+
+        AtomicReference<Double> groomingCost = new AtomicReference<>(0.0d);
+        if(appointment.getGroomings() != null) {
+            appointment.getGroomings().forEach(g -> {
+                groomingCost.updateAndGet(v -> v + g.getCost());
+            });
+        }
+
+        Double finalAmount = vaccineCost + groomingCost.get() + medicineCost.get();
+        appointment.setAmount(finalAmount);
+        appointment.setUpdatedOn(Timestamp.from(Instant.now()));
+        appointment.setStatus(AppointmentStatus.CLOSED);
+        appointmentRepository.save(appointment);
 
         return appointment;
     }
