@@ -86,7 +86,7 @@ public class UserController {
     public ResponseEntity<List<User>> getPetStaff(@RequestParam("clinic") Integer clinicId) throws Exception {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            List<User> users = userDetailsService.getClinicStaffs(true);
+            List<User> users = userDetailsService.getClinicStaffs(false, clinicId);
             return ResponseEntity.ok().body(users);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();

@@ -5,6 +5,7 @@ import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import edu.fanshawe.pawsomecare.model.Clinic;
 import edu.fanshawe.pawsomecare.model.Role;
@@ -134,10 +135,19 @@ public class UserDetailsService {
 		return oStaff.get().getUser();
 	}
 
-	public List<User> getClinicStaffs(boolean allStaffs) {
-		List<Role> staffRoles = roleRepository.findByRoleTypeIn(allStaffs ? Arrays.asList("VETERINARIAN", "GROOMING") : Arrays.asList("VETERINARIAN"));
-		List<User> staffs = userRepository.findByAuthRolesIn(staffRoles);
-		return staffs;
+	public List<User> getClinicStaffs(boolean allStaffs, Integer clinicId) {
+		List<Role> staffRoles = roleRepository.findByRoleTypeIn(Arrays.asList("VETERINARIAN", "GROOMING"));
+		if(allStaffs) {
+			List<User> staffs = userRepository.findByAuthRolesIn(staffRoles);
+			return staffs;
+		} else {
+			List<Clinic> clinics = clinicRepository.findByIdIn(Arrays.asList(clinicId));
+			if(!clinics.isEmpty()) {
+				Clinic clinic = clinics.get(0);
+				return clinic.getStaffs().stream().map(s -> s.getUser()).collect(Collectors.toUnmodifiableList());
+			}
+			return Arrays.asList();
+		}
 	}
 
 }

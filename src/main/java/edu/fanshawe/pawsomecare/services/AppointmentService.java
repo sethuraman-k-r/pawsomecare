@@ -155,10 +155,15 @@ public class AppointmentService {
     }
 
     public List<Appointment> getPetAppointments(User user) {
-        return appointmentRepository.findByUserEquals(user).stream().map(a -> {
+
+        Comparator<Appointment> dateComp = Comparator.comparing(Appointment::getApptTime);
+
+        List<Appointment> appointments = appointmentRepository.findByUserEquals(user).stream().map(a -> {
             a.setStaffDetails(a.getStaff().getUser());
             return a;
-        }).collect(Collectors.toUnmodifiableList());
+        }).collect(Collectors.toList());
+        appointments.sort(dateComp);
+        return appointments;
     }
 
     public List<Appointment> getStaffPetAppointments(User user) {
