@@ -31,4 +31,9 @@ public class Role {
     @ToString.Exclude
     private List<User> users;
 
+    public Role(Integer id, String roleType) {
+        this.id = id;
+        this.roleType = roleType;
+    }
+
 }

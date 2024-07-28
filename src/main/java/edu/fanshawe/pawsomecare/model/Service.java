@@ -31,4 +31,9 @@ public class Service {
     @ToString.Exclude
     private List<Appointment> appointments;
 
+    public Service(Integer id, OfferService serviceName) {
+        this.id = id;
+        this.serviceName = serviceName;
+    }
+
 }
