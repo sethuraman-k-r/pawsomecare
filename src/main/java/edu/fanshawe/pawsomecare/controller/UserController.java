@@ -1,10 +1,7 @@
 package edu.fanshawe.pawsomecare.controller;
 
 import edu.fanshawe.pawsomecare.model.*;
-import edu.fanshawe.pawsomecare.model.request.AdoptionRequest;
-import edu.fanshawe.pawsomecare.model.request.ApplyLicenseRequest;
-import edu.fanshawe.pawsomecare.model.request.AppointmentRequest;
-import edu.fanshawe.pawsomecare.model.request.UpdatePetRequest;
+import edu.fanshawe.pawsomecare.model.request.*;
 import edu.fanshawe.pawsomecare.services.*;
 import jakarta.annotation.security.RolesAllowed;
 import lombok.AllArgsConstructor;
@@ -22,6 +19,7 @@ import java.util.List;
 public class UserController {
 
     private final PetService petService;
+    private final PetCategoryService petCategoryService;
     private final ClinicService clinicService;
     private final UserDetailsService userDetailsService;
     private final AppointmentService appointmentService;
@@ -58,6 +56,21 @@ public class UserController {
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    @PostMapping("/pet/new/unadopt")
+    public ResponseEntity<Pet> addNewUnadoptedPet(@RequestBody AddUnAdoptedPetRequest petRequest) throws Exception {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        PetCategory petCategory = petCategoryService.findPetCategory(petRequest.getCategory());
+        Pet pet = petService.addUnadoptedPet(petRequest, petCategory, user);
+        AdoptionRequest adoptionRequest = new AdoptionRequest(pet.getId(), "");
+        pet = petService.adoptNewPet(adoptionRequest, user);
+        return ResponseEntity.ok().body(pet);
+    }
+
+    @GetMapping("/pet/category")
+    public ResponseEntity<List<PetCategory>> getPetCategory() {
+        return ResponseEntity.ok().body(petCategoryService.getPetCategoryList());
     }
 
     @PostMapping("pet/license")

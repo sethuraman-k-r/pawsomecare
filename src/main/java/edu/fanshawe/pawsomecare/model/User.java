@@ -87,6 +87,11 @@ public class User implements Serializable, UserDetails {
 	@JoinColumn(name = "staff_id", referencedColumnName = "id")
 	private Staff staff;
 
+	@OneToMany(mappedBy= "addedBy", fetch = FetchType.EAGER)
+	@ToString.Exclude
+	@JsonIgnore
+	private List<Pet> petCreators;
+
 	public Appointment addAppointment(Appointment appointment) {
 		getAppointments().add(appointment);
 		appointment.setUser(this);

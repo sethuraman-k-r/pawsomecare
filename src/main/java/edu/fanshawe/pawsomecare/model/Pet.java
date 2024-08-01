@@ -26,8 +26,6 @@ public class Pet implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
-	private Integer age;
-
 	@Column(name="created_at")
 	private Timestamp createdAt;
 
@@ -81,6 +79,12 @@ public class Pet implements Serializable {
 	@JoinColumn(name="owner_id")
 	@JsonIgnore
 	private User user;
+
+	//bi-directional many-to-one association to Category
+	@ManyToOne
+	@ToString.Exclude
+	@JsonIgnore
+	private User addedBy;
 
 	public AdoptionForm addAdoptionForm(AdoptionForm adoptionForm) {
 		getAdoptionForms().add(adoptionForm);

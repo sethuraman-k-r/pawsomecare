@@ -8,6 +8,7 @@ import edu.fanshawe.pawsomecare.model.request.*;
 import edu.fanshawe.pawsomecare.repository.UserRepository;
 import edu.fanshawe.pawsomecare.services.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +49,9 @@ public class AdminController {
 
     @PostMapping("/pet/new/unadopt")
     public ResponseEntity<Pet> addNewUnadoptedPet(@RequestBody AddUnAdoptedPetRequest petRequest) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         PetCategory petCategory = petCategoryService.findPetCategory(petRequest.getCategory());
-        return ResponseEntity.ok().body(petService.addUnadoptedPet(petRequest, petCategory));
+        return ResponseEntity.ok().body(petService.addUnadoptedPet(petRequest, petCategory, user));
     }
 
     @GetMapping("/pet/groom")
