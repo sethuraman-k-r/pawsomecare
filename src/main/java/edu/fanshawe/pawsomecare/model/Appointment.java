@@ -64,10 +64,9 @@ public class Appointment implements Serializable {
 	@JoinColumn(name="clinic")
 	private Clinic clinic;
 
-	//bi-directional many-to-one association to Feedback
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name="feedback")
-	private Feedback feedbackBean;
+	private Feedback feedback;
 
 	//bi-directional many-to-one association to Pet
 	@ManyToOne

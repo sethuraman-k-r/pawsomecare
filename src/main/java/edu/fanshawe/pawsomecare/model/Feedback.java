@@ -25,8 +25,6 @@ public class Feedback implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 
-	private Integer appointment;
-
 	@Column(name="created_at")
 	private Timestamp createdAt;
 
@@ -38,22 +36,8 @@ public class Feedback implements Serializable {
 	private String title;
 
 	//bi-directional many-to-one association to Appointment
-	@OneToMany(mappedBy="feedbackBean")
+	@OneToOne(mappedBy="feedback")
 	@ToString.Exclude
-	private List<Appointment> appointments;
-
-	public Appointment addAppointment(Appointment appointment) {
-		getAppointments().add(appointment);
-		appointment.setFeedbackBean(this);
-
-		return appointment;
-	}
-
-	public Appointment removeAppointment(Appointment appointment) {
-		getAppointments().remove(appointment);
-		appointment.setFeedbackBean(null);
-
-		return appointment;
-	}
+	private Appointment appointment;
 
 }

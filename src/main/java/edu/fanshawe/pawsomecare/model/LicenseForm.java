@@ -69,6 +69,8 @@ public class LicenseForm implements Serializable {
 	@Transient
 	private Pet animal;
 
+	private LicenseStatus licenseStatus;
+
 	public Pet addPet(Pet pet) {
 		getPets().add(pet);
 		pet.setLicenseForm(this);

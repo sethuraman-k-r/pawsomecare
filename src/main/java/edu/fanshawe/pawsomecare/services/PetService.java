@@ -96,6 +96,7 @@ public class PetService {
 				licenseForm.setIsActive(true);
 				licenseForm.setUser(user);
 				licenseForm.setPet(pet);
+				licenseForm.setLicenseStatus(LicenseStatus.NOT_APPROVED);
 				licenseFormRepository.save(licenseForm);
 
 				pet.setLicenseForm(licenseForm);
@@ -136,6 +137,7 @@ public class PetService {
 			calendar.setTime(date);
 			calendar.add(Calendar.YEAR, 2);
 			licenseForm.setExpiresOn(Timestamp.from(calendar.toInstant()));
+			licenseForm.setLicenseStatus(LicenseStatus.APPROVED);
 			licenseFormRepository.save(licenseForm);
 
 			Pet pet = licenseForm.getPet();
