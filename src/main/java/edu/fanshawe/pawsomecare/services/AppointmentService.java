@@ -3,6 +3,7 @@ package edu.fanshawe.pawsomecare.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import edu.fanshawe.pawsomecare.model.*;
 import edu.fanshawe.pawsomecare.model.request.AppointmentRequest;
+import edu.fanshawe.pawsomecare.model.request.FeedbackRequest;
 import edu.fanshawe.pawsomecare.model.request.FinishAppointment;
 import edu.fanshawe.pawsomecare.repository.*;
 import lombok.AllArgsConstructor;
@@ -27,6 +28,7 @@ public class AppointmentService {
     private final GroomingRepository groomingRepository;
     private final MedicineRepository medicineRepository;
     private final ObjectMapper objectMapper;
+    private final FeedbackRepository feedbackRepository;
 
     public Appointment bookAppointment(AppointmentRequest appointmentRequest, User user) throws Exception {
         Optional<Pet> oPet = petRepository.findById(appointmentRequest.getPetId());
@@ -183,5 +185,25 @@ public class AppointmentService {
             a.setStaffDetails(a.getStaff().getUser());
             return a;
         }).collect(Collectors.toUnmodifiableList());
+    }
+
+    public boolean doRateService(FeedbackRequest feedbackRequest, User user) {
+       Optional<Appointment> appointmentOptional = appointmentRepository.findByIdAndUser(feedbackRequest.getApptId(), user);
+        if(appointmentOptional.isPresent()) {
+            Appointment appointment = appointmentOptional.get();
+            Feedback feedback = new Feedback();
+            feedback.setRate(feedbackRequest.getRating());
+            feedback.setCreatedAt(Timestamp.from(Instant.now()));
+            feedback.setTitle(feedbackRequest.getTitle());
+            feedback.setDescription(feedbackRequest.getDescription());
+            feedback = feedbackRepository.save(feedback);
+
+
+            appointment.setFeedback(feedback);
+            appointmentRepository.save(appointment);
+
+            return true;
+        }
+        return false;
     }
 }

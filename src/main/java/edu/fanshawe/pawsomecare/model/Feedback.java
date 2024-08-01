@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -38,6 +39,7 @@ public class Feedback implements Serializable {
 	//bi-directional many-to-one association to Appointment
 	@OneToOne(mappedBy="feedback")
 	@ToString.Exclude
+	@JsonIgnore
 	private Appointment appointment;
 
 }

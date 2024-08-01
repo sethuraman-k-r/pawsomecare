@@ -149,4 +149,14 @@ public class UserController {
         }
     }
 
+    @PostMapping("pet/book/appointment/feedback")
+    public ResponseEntity<Boolean> doFeedback(@RequestBody @Validated FeedbackRequest feedbackRequest) throws Exception {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            return ResponseEntity.ok().body(appointmentService.doRateService(feedbackRequest, user));
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().header("error", ex.getLocalizedMessage()).build();
+        }
+    }
+
 }

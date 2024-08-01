@@ -15,4 +15,6 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
 
     Optional<Appointment> findByIdAndStaff(Integer petId, Staff staff);
 
+    Optional<Appointment> findByIdAndUser(Integer apptId, User user);
+
 }
