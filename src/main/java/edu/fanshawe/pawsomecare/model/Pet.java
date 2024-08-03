@@ -60,7 +60,7 @@ public class Pet implements Serializable {
 	private List<Appointment> appointments;
 
 	//bi-directional many-to-one association to LicenseForm
-	@OneToMany(mappedBy="pet")
+	@OneToMany(mappedBy="pet", fetch = FetchType.EAGER)
 	@ToString.Exclude
 	private List<LicenseForm> licenseForms;
 
