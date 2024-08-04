@@ -26,9 +26,17 @@ public class Service {
     @Column
     private OfferService serviceName;
 
-    @OneToMany(mappedBy="service")
-    @JsonIgnore
+    @ManyToMany
+    @JoinTable(
+            name="service_appointment"
+            , joinColumns={
+            @JoinColumn(name="service_id")
+    }
+            , inverseJoinColumns={
+            @JoinColumn(name="appointment_id")
+    })
     @ToString.Exclude
+    @JsonIgnore
     private List<Appointment> appointments;
 
     public Service(Integer id, OfferService serviceName) {

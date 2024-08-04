@@ -1,7 +1,10 @@
 package edu.fanshawe.pawsomecare.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -22,28 +25,14 @@ public class Appointment implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy= GenerationType.IDENTITY)
 	private Integer id;
-
-	private double amount;
 
 	@Column(name="appt_time")
 	private Timestamp apptTime;
 
-	@Column(name="consult_detail", length = 3000)
-	private String consultDetail;
-
 	@Column(name="created_at")
 	private Timestamp createdAt;
-
-	@Column(name="is_consult")
-	private Boolean isConsult;
-
-	@Column(name="is_grooming")
-	private Boolean isGrooming;
-
-	@Column(name="is_vaccine")
-	private Boolean isVaccine;
 
 	@Column(name="next_visit_suggest")
 	private Timestamp nextVisitSuggest;
@@ -64,10 +53,6 @@ public class Appointment implements Serializable {
 	@JoinColumn(name="clinic")
 	private Clinic clinic;
 
-	@OneToOne
-	@JoinColumn(name="feedback")
-	private Feedback feedback;
-
 	//bi-directional many-to-one association to Pet
 	@ManyToOne
 	private Pet pet;
@@ -82,13 +67,8 @@ public class Appointment implements Serializable {
 	@JoinColumn(name="vaccine")
 	private Vaccine vaccine;
 
-	//bi-directional many-to-one association to Staff
-	@ManyToOne
-	@JoinColumn(name="staff_id")
-	private Staff staff;
-
 	@Transient
-	public User staffDetails;
+	public List<User> staffDetails;
 
 	//bi-directional many-to-many association to Medicine
 	@ManyToMany
@@ -104,9 +84,9 @@ public class Appointment implements Serializable {
 	@ToString.Exclude
 	private List<Medicine> medicines;
 
-	@ManyToOne
-	@JoinColumn(name="service_id", nullable=false)
-	private Service service;
+	@ManyToMany(mappedBy = "appointments")
+	@ToString.Exclude
+	private List<Service> services;
 
 	//bi-directional many-to-many association to Grooming
 	@ManyToMany(mappedBy="appointments")

@@ -40,6 +40,6 @@ public class Feedback implements Serializable {
 	@OneToOne(mappedBy="feedback")
 	@ToString.Exclude
 	@JsonIgnore
-	private Appointment appointment;
+	private AppointmentDetails appointmentDetails;
 
 }

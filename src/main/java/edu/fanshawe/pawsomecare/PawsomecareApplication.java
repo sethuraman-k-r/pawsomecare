@@ -31,7 +31,8 @@ public class PawsomecareApplication {
 		List<Service> services = Arrays.asList(
 				new Service(1, OfferService.CONSULTATION),
 				new Service(2, OfferService.VACCINATION),
-				new Service(3, OfferService.GROOMING)
+				new Service(3, OfferService.GROOMING),
+				new Service(4, OfferService.CHECKUP)
 		);
 		serviceRepository.saveAll(services);
 	}
