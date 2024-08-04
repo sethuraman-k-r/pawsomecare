@@ -29,6 +29,7 @@ public class AppointmentService {
     private final MedicineRepository medicineRepository;
     private final ObjectMapper objectMapper;
     private final FeedbackRepository feedbackRepository;
+    private final AppointmentDetailsRepository appointmentDetailsRepository;
 
     public Appointment bookAppointment(AppointmentRequest appointmentRequest, User user) throws Exception {
 //        Optional<Pet> oPet = petRepository.findById(appointmentRequest.getPetId());
@@ -196,6 +197,7 @@ public class AppointmentService {
        Optional<Appointment> appointmentOptional = appointmentRepository.findByIdAndUser(feedbackRequest.getApptId(), user);
         if(appointmentOptional.isPresent()) {
             Appointment appointment = appointmentOptional.get();
+            AppointmentDetails appointmentDetails = appointment.getAppointmentDetails();
             Feedback feedback = new Feedback();
             feedback.setRate(feedbackRequest.getRating());
             feedback.setCreatedAt(Timestamp.from(Instant.now()));
@@ -204,8 +206,8 @@ public class AppointmentService {
             feedback = feedbackRepository.save(feedback);
 
 
-//            appointment.setFeedback(feedback);
-            appointmentRepository.save(appointment);
+            appointmentDetails.setFeedback(feedback);
+            appointmentDetailsRepository.save(appointmentDetails);
 
             return true;
         }

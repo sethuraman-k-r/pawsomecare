@@ -93,4 +93,8 @@ public class Appointment implements Serializable {
 	@ToString.Exclude
 	private List<Grooming> groomings;
 
+	@OneToOne
+	@JoinColumn(name="appointmentDetails")
+	private AppointmentDetails appointmentDetails;
+
 }

@@ -1,5 +1,6 @@
 package edu.fanshawe.pawsomecare.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -51,5 +52,10 @@ public class AppointmentDetails implements Serializable {
 	@OneToOne
 	@JoinColumn(name="feedback")
 	private Feedback feedback;
+
+	@OneToOne(mappedBy="appointmentDetails")
+	@ToString.Exclude
+	private Appointment appointment;
+
 
 }
