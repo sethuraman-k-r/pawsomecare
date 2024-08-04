@@ -27,7 +27,18 @@ public class StaffController {
     public ResponseEntity<List<Appointment>> getAppointments() throws Exception {
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         try {
-            List<Appointment> appointments = appointmentService.getStaffPetAppointments(user);
+            List<Appointment> appointments = appointmentService.getStaffPetAppointments(user, AppointmentStatus.OPEN);
+            return ResponseEntity.ok().body(appointments);
+        } catch (Exception ex) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping("pet/appointments/history")
+    public ResponseEntity<List<Appointment>> getAppointmentsHistory() throws Exception {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        try {
+            List<Appointment> appointments = appointmentService.getStaffPetAppointments(user, AppointmentStatus.CLOSED);
             return ResponseEntity.ok().body(appointments);
         } catch (Exception ex) {
             return ResponseEntity.badRequest().build();

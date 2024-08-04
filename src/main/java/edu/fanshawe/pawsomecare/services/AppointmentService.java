@@ -201,25 +201,10 @@ public class AppointmentService {
         return appointments;
     }
 
-    public List<Appointment> getStaffPetAppointments(User user) {
-//        Staff staff = user.getStaff();
-//        List<String> staffRoles = staff.getUser().getAuthRoles().stream().map(r -> r.getRoleType()).collect(Collectors.toUnmodifiableList());
-//        return appointmentRepository.findByStaffEquals(staff).stream()
-//                .filter(a -> {
-//                    if(staffRoles.contains("VETERINARIAN")) {
-//                        return a.getIsVaccine() || a.getIsConsult();
-//                    }
-//                    if(staffRoles.contains("GROOMING")) {
-//                        return a.getIsGrooming();
-//                    }
-//                    return false;
-//                })
-//                .map(a -> {
-////            a.setStaffDetails(a.getStaff().getUser());
-//            return a;
-//        }).collect(Collectors.toUnmodifiableList());
-
-        return Arrays.asList();
+    public List<Appointment> getStaffPetAppointments(User user, AppointmentStatus status) {
+        Staff staff = user.getStaff();
+        return appointmentDetailsRepository.findByStaffEquals(staff, status).stream()
+                .map(a -> a.getAppointment()).collect(Collectors.toUnmodifiableList());
     }
 
     public boolean doRateService(FeedbackRequest feedbackRequest, User user) {

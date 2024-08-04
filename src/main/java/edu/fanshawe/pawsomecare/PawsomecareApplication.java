@@ -19,22 +19,26 @@ public class PawsomecareApplication {
 		ApplicationContext context = SpringApplication.run(PawsomecareApplication.class, args);
 
 		RoleRepository roleRepository = context.getBean(RoleRepository.class);
-		List<Role> roles = Arrays.asList(
-				new Role(1, "CLIENT"),
-				new Role(2, "ADMIN"),
-				new Role(3, "VETERINARIAN"),
-				new Role(4, "GROOMING")
-		);
-		roleRepository.saveAll(roles);
+		if(roleRepository.findAll().isEmpty()) {
+			List<Role> roles = Arrays.asList(
+					new Role(1, "CLIENT"),
+					new Role(2, "ADMIN"),
+					new Role(3, "VETERINARIAN"),
+					new Role(4, "GROOMING")
+			);
+			roleRepository.saveAll(roles);
+		}
 
 		ServiceRepository serviceRepository = context.getBean(ServiceRepository.class);
-		List<Service> services = Arrays.asList(
-				new Service(1, OfferService.CONSULTATION),
-				new Service(2, OfferService.VACCINATION),
-				new Service(3, OfferService.GROOMING),
-				new Service(4, OfferService.CHECKUP)
-		);
-		serviceRepository.saveAll(services);
+		if(serviceRepository.findAll().isEmpty()) {
+			List<Service> services = Arrays.asList(
+					new Service(1, OfferService.CONSULTATION),
+					new Service(2, OfferService.VACCINATION),
+					new Service(3, OfferService.GROOMING),
+					new Service(4, OfferService.CHECKUP)
+			);
+			serviceRepository.saveAll(services);
+		}
 	}
 
 }
