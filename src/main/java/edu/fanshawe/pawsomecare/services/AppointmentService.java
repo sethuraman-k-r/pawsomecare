@@ -32,53 +32,75 @@ public class AppointmentService {
     private final AppointmentDetailsRepository appointmentDetailsRepository;
 
     public Appointment bookAppointment(AppointmentRequest appointmentRequest, User user) throws Exception {
-//        Optional<Pet> oPet = petRepository.findById(appointmentRequest.getPetId());
-//        Optional<Clinic> oClinic = clinicRepository.findById(appointmentRequest.getClinicId());
-//        Optional<Staff> oStaff = staffRepository.findById(appointmentRequest.getStaffId());
-//        Optional<edu.fanshawe.pawsomecare.model.Service> oService = serviceRepository.findByServiceNameEquals(appointmentRequest.getService());
-//        if(oPet.isEmpty()) {
-//            throw new Exception("Pet details not found");
-//        }
-//        if(oClinic.isEmpty()) {
-//            throw new Exception("Clinic unavailable");
-//        }
-//        if(oStaff.isEmpty()) {
-//            throw new Exception("Staff details not found");
-//        }
-//        if(oService.isEmpty()) {
-//            throw new Exception("Service details not found");
-//        }
-//        List<Grooming> groomings = null;
-//        if(!appointmentRequest.getGrooms().isEmpty()) {
-//            groomings = groomingRepository.findAllById(appointmentRequest.getGrooms());
-//        }
-//        edu.fanshawe.pawsomecare.model.Service service = oService.get();
-//        Appointment appointment = new Appointment();
-//        appointment.setPet(oPet.get());
-//        appointment.setClinic(oClinic.get());
-////        appointment.setStaff(oStaff.get());
-//        appointment.setReason(appointmentRequest.getReason());
-//        appointment.setApptTime(Timestamp.from(appointmentRequest.getApptTime().toInstant()));
-//        appointment.setCreatedAt(Timestamp.from(Instant.now()));
-//        appointment.setService(oService.get());
-//        appointment.setUser(user);
-//        appointment.setIsConsult(service.getServiceName() == OfferService.CONSULTATION);
-//        appointment.setIsGrooming(service.getServiceName() == OfferService.GROOMING);
-//        appointment.setIsVaccine(service.getServiceName() == OfferService.VACCINATION);
-//
-//        appointment.setStatus(AppointmentStatus.OPEN);
-//        appointmentRepository.save(appointment);
-//
-//        if(groomings != null) {
-//            groomingRepository.saveAll(groomings.stream().map(grooming -> {
-//                grooming.getAppointments().add(appointment);
-//                return grooming;
-//            }).collect(Collectors.toUnmodifiableList()));
-//        }
-//
-//        return appointment;
+        Optional<Pet> oPet = petRepository.findById(appointmentRequest.getPetId());
+        Optional<Clinic> oClinic = clinicRepository.findById(appointmentRequest.getClinicId());
+        Staff vetStaff = null;
+        Staff grmStaff = null;
+        if(appointmentRequest.getVetStaffId() != -1) {
+            Optional<Staff> oVetStaff = staffRepository.findById(appointmentRequest.getVetStaffId());
+            if(oVetStaff.isEmpty()) {
+                throw new Exception("Staff details not found");
+            }
+            vetStaff = oVetStaff.get();
+        }
+        if(appointmentRequest.getGrmStaffId() != -1) {
+            Optional<Staff> oGrmStaff = staffRepository.findById(appointmentRequest.getGrmStaffId());
+            if(oGrmStaff.isEmpty()) {
+                throw new Exception("Staff details not found");
+            }
+            grmStaff = oGrmStaff.get();
+        }
+        List<edu.fanshawe.pawsomecare.model.Service> services = serviceRepository.findByServiceNameIn(appointmentRequest.getServices());
+        if(oPet.isEmpty()) {
+            throw new Exception("Pet details not found");
+        }
+        if(oClinic.isEmpty()) {
+            throw new Exception("Clinic unavailable");
+        }
+        List<Grooming> groomings = null;
+        if(!appointmentRequest.getGrooms().isEmpty()) {
+            groomings = groomingRepository.findAllById(appointmentRequest.getGrooms());
+        }
 
-        return null;
+        AppointmentDetails appointmentDetails = new AppointmentDetails();
+        appointmentDetails.setGroomingStaff(grmStaff);
+        appointmentDetails.setGroomingCost(0.0d);
+        appointmentDetails.setVeterinaryStaff(vetStaff);
+        appointmentDetails.setVeterinarianCost(0.0d);
+        if(grmStaff != null) {
+            appointmentDetails.setGroomingStatus(AppointmentStatus.OPEN);
+        }
+        if(vetStaff != null) {
+            appointmentDetails.setVeterinarianStatus(AppointmentStatus.OPEN);
+        }
+        appointmentDetailsRepository.save(appointmentDetails);
+
+        Appointment appointment = new Appointment();
+        appointment.setPet(oPet.get());
+        appointment.setClinic(oClinic.get());
+        appointment.setReason(appointmentRequest.getReason());
+        appointment.setApptTime(Timestamp.from(appointmentRequest.getApptTime().toInstant()));
+        appointment.setCreatedAt(Timestamp.from(Instant.now()));
+        appointment.setUser(user);
+        appointment.setStatus(AppointmentStatus.OPEN);
+        appointment.setAppointmentDetails(appointmentDetails);
+        appointmentRepository.save(appointment);
+
+        if(groomings != null && !groomings.isEmpty()) {
+            groomingRepository.saveAll(groomings.stream().map(grooming -> {
+                grooming.getAppointments().add(appointment);
+                return grooming;
+            }).collect(Collectors.toUnmodifiableList()));
+        }
+
+        if(!services.isEmpty()) {
+            serviceRepository.saveAll(services.stream().map(service -> {
+                service.getAppointments().add(appointment);
+                return service;
+            }).collect(Collectors.toUnmodifiableList()));
+        }
+
+        return appointment;
     }
 
     public Appointment finishAppointment(FinishAppointment finishAppointment, User user) throws Exception {
@@ -165,7 +187,14 @@ public class AppointmentService {
         Comparator<Appointment> dateComp = Comparator.comparing(Appointment::getApptTime);
 
         List<Appointment> appointments = appointmentRepository.findByUserEquals(user).stream().map(a -> {
-//            a.setStaffDetails(a.getStaff().getUser());
+            List<User> staffs = new ArrayList<>();
+            if(a.getAppointmentDetails().getVeterinaryStaff() != null) {
+                staffs.add(a.getAppointmentDetails().getVeterinaryStaff().getUser());
+            }
+            if(a.getAppointmentDetails().getGroomingStaff() != null) {
+                staffs.add(a.getAppointmentDetails().getGroomingStaff().getUser());
+            }
+            a.setStaffDetails(staffs);
             return a;
         }).collect(Collectors.toList());
         appointments.sort(dateComp);

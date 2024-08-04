@@ -55,6 +55,7 @@ public class AppointmentDetails implements Serializable {
 
 	@OneToOne(mappedBy="appointmentDetails")
 	@ToString.Exclude
+	@JsonIgnore
 	private Appointment appointment;
 
 
