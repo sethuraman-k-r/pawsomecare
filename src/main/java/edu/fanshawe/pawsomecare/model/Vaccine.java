@@ -43,20 +43,20 @@ public class Vaccine implements Serializable {
 	@OneToMany(mappedBy="vaccine")
 	@ToString.Exclude
 	@JsonIgnore
-	private List<Appointment> appointments;
+	private List<AppointmentDetails> appointmentDetails;
 
-	public Appointment addAppointment(Appointment appointment) {
-		getAppointments().add(appointment);
-		appointment.setVaccine(this);
+	public AppointmentDetails addAppointmentDetails(AppointmentDetails appointmentDetails) {
+		getAppointmentDetails().add(appointmentDetails);
+		appointmentDetails.setVaccine(this);
 
-		return appointment;
+		return appointmentDetails;
 	}
 
-	public Appointment removeAppointment(Appointment appointment) {
-		getAppointments().remove(appointment);
-		appointment.setVaccine(null);
+	public AppointmentDetails removeAppointmentDetails(AppointmentDetails appointmentDetails) {
+		getAppointmentDetails().remove(appointmentDetails);
+		appointmentDetails.setVaccine(null);
 
-		return appointment;
+		return appointmentDetails;
 	}
 
 }

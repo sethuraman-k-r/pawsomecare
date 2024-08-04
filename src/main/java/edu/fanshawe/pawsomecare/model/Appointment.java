@@ -42,8 +42,7 @@ public class Appointment implements Serializable {
 
 	private AppointmentStatus status;
 
-	@Column(name="tablet_prescribed")
-	private String tabletPrescribed;
+
 
 	@Column(name="updated_on")
 	private Timestamp updatedOn;
@@ -61,11 +60,6 @@ public class Appointment implements Serializable {
 	@ManyToOne
 	@JoinColumn(name="appt_by")
 	private User user;
-
-	//bi-directional many-to-one association to Vaccine
-	@ManyToOne
-	@JoinColumn(name="vaccine")
-	private Vaccine vaccine;
 
 	@Transient
 	public List<User> staffDetails;
@@ -96,5 +90,11 @@ public class Appointment implements Serializable {
 	@OneToOne
 	@JoinColumn(name="appointmentDetails")
 	private AppointmentDetails appointmentDetails;
+
+	@Transient
+	private boolean isGroom;
+
+	@Transient
+	private boolean isConsult;
 
 }

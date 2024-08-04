@@ -65,8 +65,10 @@ public class AppointmentService {
         AppointmentDetails appointmentDetails = new AppointmentDetails();
         appointmentDetails.setGroomingStaff(grmStaff);
         appointmentDetails.setGroomingCost(0.0d);
+        appointmentDetails.setVeterinarianStatus(null);
         appointmentDetails.setVeterinaryStaff(vetStaff);
         appointmentDetails.setVeterinarianCost(0.0d);
+        appointmentDetails.setVeterinarianStatus(null);
         if(grmStaff != null) {
             appointmentDetails.setGroomingStatus(AppointmentStatus.OPEN);
         }
@@ -104,82 +106,98 @@ public class AppointmentService {
     }
 
     public Appointment finishAppointment(FinishAppointment finishAppointment, User user) throws Exception {
-//        Optional<Appointment> oAppt = appointmentRepository.findByIdAndStaff(finishAppointment.getAppointmentId(), user.getStaff());
-//        if(oAppt.isEmpty()) {
-//            throw new Exception("Appointment is not present");
-//        }
-//        Appointment appointment = oAppt.get();
-//        appointment.setConsultDetail(finishAppointment.getAnalysis());
-//        appointment.setNextVisitSuggest(Timestamp.from(finishAppointment.getNextTime().toInstant()));
-//        AtomicReference<Double> medicineCost = new AtomicReference<>(0.0d);
-//        Map<String, Object> presInfo = new HashMap<>();
-//        List<Map<String, Object>> presMeds = new ArrayList<>();
-//        if(finishAppointment.getMedicines() != null) {
-//            finishAppointment.getMedicines().stream().forEach(m -> {
-//                Map<String, Object> med = m;
-//                Integer medicineId = (Integer) med.get("id");
-//                Integer numbers = (Integer) med.get("nos");
-//                Optional<Medicine> oMedicine = medicineRepository.findById(medicineId);
-//                if(oMedicine.isPresent()) {
-//                    Medicine medicine = oMedicine.get();
-//                    medicine.setCount(medicine.getCount() - numbers);
-//                    medicineRepository.save(medicine);
-//                    medicineCost.updateAndGet(v -> v + (medicine.getPerCost() * numbers));
-//
-//                    Map<String, Object> medInfo = new HashMap<>();
-//                    medInfo.put("medicine", medicine.getName());
-//                    medInfo.put("mrng", med.get("mrng"));
-//                    medInfo.put("noon", med.get("noon"));
-//                    medInfo.put("evng", med.get("evng"));
-//                    medInfo.put("ngt", med.get("night"));
-//                    medInfo.put("count", numbers);
-//                    medInfo.put("cost", (medicine.getPerCost() * numbers));
-//                    presMeds.add(medInfo);
-//                }
-//            });
-//        }
-//
-//
-//        Map<String, Object> vac = new HashMap<>();
-//        Double vaccineCost = 0.0d;
-//        if(finishAppointment.getVaccineId() != -1 && finishAppointment.getVaccineId() != null) {
-//            Optional<Vaccine> oVaccine = vaccineRepository.findById(finishAppointment.getVaccineId());
-//            if(oVaccine.isPresent()) {
-//                Vaccine vaccine = oVaccine.get();
-//                appointment.setVaccine(vaccine);
-//                vaccineCost += vaccine.getAmount();
-//                vac.put("name", vaccine.getName());
-//                vac.put("cost", vaccineCost);
-//            }
-//        }
-//
-//        List<Map<String, Object>> grooms = new ArrayList<>();
-//        AtomicReference<Double> groomingCost = new AtomicReference<>(0.0d);
-//        if(appointment.getGroomings() != null) {
-//            appointment.getGroomings().forEach(g -> {
-//                Map<String, Object> groom = new HashMap<>();
-//                groomingCost.updateAndGet(v -> v + g.getCost());
-//                groom.put("name", g.getName());
-//                groom.put("cost", g.getCost());
-//                grooms.add(groom);
-//            });
-//        }
-//
-//        presInfo.put("medicine", presMeds);
-//        presInfo.put("vaccine", Arrays.asList(vac));
-//        presInfo.put("grooming", grooms);
-////        presInfo.put("fee", appointment.getStaff().getConsultFee());
-//
-//        appointment.setTabletPrescribed(objectMapper.writeValueAsString(presInfo));
-//
-////        Double finalAmount = vaccineCost + groomingCost.get() + medicineCost.get() + appointment.getStaff().getConsultFee();
-////        appointment.setAmount(finalAmount);
-//        appointment.setUpdatedOn(Timestamp.from(Instant.now()));
-//        appointment.setStatus(AppointmentStatus.CLOSED);
-//        appointmentRepository.save(appointment);
-//
-//        return appointment;
-        return null;
+        Optional<Appointment> oAppt = appointmentRepository.findByIdAndStaff(finishAppointment.getAppointmentId(), user.getStaff());
+        if(oAppt.isEmpty()) {
+            throw new Exception("Appointment is not present");
+        }
+        Appointment appointment = oAppt.get();
+        AppointmentDetails appointmentDetails = appointment.getAppointmentDetails();
+        appointment.setNextVisitSuggest(Timestamp.from(finishAppointment.getNextTime().toInstant()));
+
+        if(appointmentDetails.getGroomingStaff() != null && appointmentDetails.getGroomingStaff().getUser().getId() == user.getId()) {
+            List<Map<String, Object>> grooms = new ArrayList<>();
+            AtomicReference<Double> groomingCost = new AtomicReference<>(0.0d);
+            if(appointment.getGroomings() != null) {
+                appointment.getGroomings().forEach(g -> {
+                    Map<String, Object> groom = new HashMap<>();
+                    groomingCost.updateAndGet(v -> v + g.getCost());
+                    groom.put("name", g.getName());
+                    groom.put("cost", g.getCost());
+                    grooms.add(groom);
+                });
+            }
+
+            appointmentDetails.setGroomDetails(objectMapper.writeValueAsString(Map.of("grooming", grooms)));
+            appointmentDetails.setGroomingStatus(AppointmentStatus.CLOSED);
+            appointmentDetails.setGroomingCost(groomingCost.get() + appointmentDetails.getGroomingStaff().getConsultFee());
+
+            appointmentDetails.setConsultDetail(String.format("%s\nGROOMING\n--------\n%s", Optional.ofNullable(appointmentDetails.getConsultDetail()).orElse(""), finishAppointment.getAnalysis()));
+        }
+
+        if(appointmentDetails.getVeterinaryStaff() != null && appointmentDetails.getVeterinaryStaff().getUser().getId() == user.getId()) {
+            AtomicReference<Double> medicineCost = new AtomicReference<>(0.0d);
+            Map<String, Object> presInfo = new HashMap<>();
+            List<Map<String, Object>> presMeds = new ArrayList<>();
+            if (finishAppointment.getMedicines() != null) {
+                finishAppointment.getMedicines().stream().forEach(m -> {
+                    Map<String, Object> med = m;
+                    Integer medicineId = (Integer) med.get("id");
+                    Integer numbers = (Integer) med.get("nos");
+                    Optional<Medicine> oMedicine = medicineRepository.findById(medicineId);
+                    if (oMedicine.isPresent()) {
+                        Medicine medicine = oMedicine.get();
+                        medicine.setCount(medicine.getCount() - numbers);
+                        medicineRepository.save(medicine);
+                        medicineCost.updateAndGet(v -> v + (medicine.getPerCost() * numbers));
+
+                        Map<String, Object> medInfo = new HashMap<>();
+                        medInfo.put("medicine", medicine.getName());
+                        medInfo.put("mrng", med.get("mrng"));
+                        medInfo.put("noon", med.get("noon"));
+                        medInfo.put("evng", med.get("evng"));
+                        medInfo.put("ngt", med.get("night"));
+                        medInfo.put("count", numbers);
+                        medInfo.put("cost", (medicine.getPerCost() * numbers));
+                        presMeds.add(medInfo);
+                    }
+                });
+            }
+
+
+            Map<String, Object> vac = new HashMap<>();
+            Double vaccineCost = 0.0d;
+            if (finishAppointment.getVaccineId() != -1 && finishAppointment.getVaccineId() != null) {
+                Optional<Vaccine> oVaccine = vaccineRepository.findById(finishAppointment.getVaccineId());
+                if (oVaccine.isPresent()) {
+                    Vaccine vaccine = oVaccine.get();
+                    appointmentDetails.setVaccine(vaccine);
+                    vaccineCost += vaccine.getAmount();
+                    vac.put("name", vaccine.getName());
+                    vac.put("cost", vaccineCost);
+                }
+            }
+
+            presInfo.put("medicine", presMeds);
+            presInfo.put("vaccine", Arrays.asList(vac));
+
+            appointmentDetails.setConsultDetails(objectMapper.writeValueAsString(presInfo));
+            appointmentDetails.setVeterinarianStatus(AppointmentStatus.CLOSED);
+            appointmentDetails.setConsultDetail(String.format("%s\nCLINIC VISIT DETAILS\n-----------------\n%s", Optional.ofNullable(appointmentDetails.getConsultDetail()).orElse(""), finishAppointment.getAnalysis()));
+            appointmentDetails.setVeterinarianCost(vaccineCost + medicineCost.get() + appointmentDetails.getVeterinaryStaff().getConsultFee());
+        }
+
+        Double finalAmount = appointmentDetails.getGroomingCost() + appointmentDetails.getVeterinarianCost();
+        appointmentDetails.setAmount(finalAmount);
+        appointment.setUpdatedOn(Timestamp.from(Instant.now()));
+
+        if((appointmentDetails.getVeterinarianStatus() == null) || (appointmentDetails.getVeterinarianStatus() == AppointmentStatus.CLOSED)
+            && (appointmentDetails.getGroomingStatus() == null) || (appointmentDetails.getGroomingStatus() == AppointmentStatus.CLOSED)) {
+            appointment.setStatus(AppointmentStatus.CLOSED);
+        }
+        appointmentDetailsRepository.save(appointmentDetails);
+        appointmentRepository.save(appointment);
+
+        return appointment;
     }
 
     public List<Appointment> getPetAppointments(User user) {
@@ -203,8 +221,14 @@ public class AppointmentService {
 
     public List<Appointment> getStaffPetAppointments(User user, AppointmentStatus status) {
         Staff staff = user.getStaff();
-        return appointmentDetailsRepository.findByStaffEquals(staff, status).stream()
-                .map(a -> a.getAppointment()).collect(Collectors.toUnmodifiableList());
+        return appointmentDetailsRepository.findByStaffEquals(staff, status)
+                .stream()
+                .map(a -> {
+                    Appointment appt = a.getAppointment();
+                    appt.setGroom(staff.getUser().getAuthRoles().stream().anyMatch(r -> r.getRoleType().contentEquals("GROOMING")));
+                    appt.setConsult(staff.getUser().getAuthRoles().stream().anyMatch(r -> r.getRoleType().contentEquals("VETERINARIAN")));
+                    return appt;
+                }).collect(Collectors.toUnmodifiableList());
     }
 
     public boolean doRateService(FeedbackRequest feedbackRequest, User user) {

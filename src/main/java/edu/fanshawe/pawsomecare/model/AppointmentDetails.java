@@ -41,6 +41,12 @@ public class AppointmentDetails implements Serializable {
 
 	private AppointmentStatus groomingStatus;
 
+	@Column(length = 3000)
+	private String consultDetails;
+
+	@Column(length = 3000)
+	private String groomDetails;
+
 	@ManyToOne
 	@JoinColumn(name="veterinarian_id")
 	private Staff veterinaryStaff;
@@ -58,5 +64,9 @@ public class AppointmentDetails implements Serializable {
 	@JsonIgnore
 	private Appointment appointment;
 
+	//bi-directional many-to-one association to Vaccine
+	@ManyToOne
+	@JoinColumn(name="vaccine")
+	private Vaccine vaccine;
 
 }
